@@ -1,0 +1,20 @@
+.footer {
+  background-color: #f0f0f0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  left: 0;
+  padding: 10px;
+  position: fixed;
+  width: 100%;
+}
+
+.footer button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.footer button img {
+  width: 30px;
+}
