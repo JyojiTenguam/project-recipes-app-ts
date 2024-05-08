@@ -1,5 +1,5 @@
 import React from 'react';
-import { getFromLocalStorage } from '../utils/localStorage';
+import { getFromLocalStorage } from '../../utils/localStorage';
 
 const doneRecipes: React.FC = () => {
   const recipes = getFromLocalStorage();
