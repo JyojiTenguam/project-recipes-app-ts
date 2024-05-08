@@ -1,10 +1,26 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from '../App';
+import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import Footer from '../Components/Footer';
 
-test('Farewell, front-end', () => {
-  // Este arquivo pode ser modificado ou deletado sem problemas
-  render(<App />);
-  const linkElement = screen.getByText(/TRYBE/i);
-  expect(linkElement).toBeInTheDocument();
+describe('Footer Test by marcolas', () => {
+  beforeEach(() => {
+    render(
+      <BrowserRouter>
+        <Footer />
+      </BrowserRouter>,
+    );
+  });
+
+  it('renderizar footer component', () => {
+    expect(document.querySelector('[data-testid="footer"]')).toBeInTheDocument();
+  });
+
+  it('renderizar drinks button', () => {
+    expect(document.querySelector('[data-testid="drinks-bottom-btn"]')).toBeInTheDocument();
+  });
+
+  it('renderizar meals button', () => {
+    expect(document.querySelector('[data-testid="meals-bottom-btn"]')).toBeInTheDocument();
+  });
 });
