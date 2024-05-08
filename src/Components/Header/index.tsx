@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import profileIcon from '../../images/profileIcon.svg';
 import searchIcon from '../../images/searchIcon.svg';
 
 function Header() {
   const [showSearchIcon, setShowSearchIcon] = useState(false);
+  const [showSearchBar, setShowSearchBar] = useState(false);
   const [pageTitle, setPageTitle] = useState('');
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleSearchClick = () => {
+    setShowSearchBar(!showSearchBar);
+  };
 
   useEffect(() => {
     const searchPages = ['/meals', '/drinks'];
@@ -18,19 +24,29 @@ function Header() {
       '/done-recipes': 'Done Recipes',
       '/favorite-recipes': 'Favorite Recipes',
     };
-    console.log(location.pathname);
     setShowSearchIcon(searchPages.includes(location.pathname));
     setPageTitle(titleMap[location.pathname] || '');
   }, [location]);
 
   return (
     <header>
-      <img src={ profileIcon } alt="Perfil" data-testid="profile-top-btn" />
-      {showSearchIcon && <img
-        src={ searchIcon }
-        alt="Pesquisa"
-        data-testid="search-top-btn"
-      />}
+      <button onClick={ () => navigate('/profile') }>
+        <img
+          src={ profileIcon }
+          alt="Perfil"
+          data-testid="profile-top-btn"
+        />
+      </button>
+      {showSearchIcon && (
+        <button onClick={ handleSearchClick }>
+          <img
+            src={ searchIcon }
+            alt="Pesquisa"
+            data-testid="search-top-btn"
+          />
+        </button>
+      )}
+      {showSearchBar && <input type="text" data-testid="search-input" />}
       <h1 data-testid="page-title">{pageTitle}</h1>
     </header>
   );
