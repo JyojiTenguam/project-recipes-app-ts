@@ -1,10 +1,14 @@
 import React from 'react';
+import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import Footer from '../Components/Footer';
+
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import Header from '../Components/Header/index';
 
 const SEARCH_TOP_BTN = 'search-top-btn';
-
+        
 describe('Header', () => {
   test('renderiza o cabeçalho com o ícone do perfil', () => {
     const { getByTestId } = render(
@@ -68,5 +72,27 @@ describe('Header', () => {
     );
     const pageTitle = getByTestId('page-title');
     expect(pageTitle.textContent).toBe('Meals');
+  });
+});
+
+describe('Footer Test by marcolas', () => {
+  beforeEach(() => {
+    render(
+      <BrowserRouter>
+        <Footer />
+      </BrowserRouter>,
+    );
+  });
+
+  it('renderizar footer component', () => {
+    expect(document.querySelector('[data-testid="footer"]')).toBeInTheDocument();
+  });
+
+  it('renderizar drinks button', () => {
+    expect(document.querySelector('[data-testid="drinks-bottom-btn"]')).toBeInTheDocument();
+  });
+
+  it('renderizar meals button', () => {
+    expect(document.querySelector('[data-testid="meals-bottom-btn"]')).toBeInTheDocument();
   });
 });
