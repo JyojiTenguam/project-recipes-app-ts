@@ -2,7 +2,6 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { MemoryRouter, BrowserRouter } from 'react-router-dom';
 import Header from '../Components/Header/index';
-
 import Footer from '../Components/Footer';
 
 const SEARCH_TOP_BTN = 'search-top-btn';
