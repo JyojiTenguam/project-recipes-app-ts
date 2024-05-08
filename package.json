@@ -52,6 +52,7 @@
     "cross-env": "^7.0.3",
     "cypress": "^10.11.0",
     "cypress-multi-reporters": "^1.6.2",
+    "eslint": "^9.2.0",
     "fs-extra": "^10.1.0",
     "jsdom": "^21.1.0",
     "mocha": "^10.2.0",
