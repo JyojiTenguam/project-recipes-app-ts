@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import './Footer.css';
+import './style.css';
 
 function Footer() {
   return (
