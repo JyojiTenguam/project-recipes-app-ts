@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import profileIcon from '../../images/profileIcon.svg';
 import searchIcon from '../../images/searchIcon.svg';
 
-const Header = () => {
+function Header() {
   const [showSearchIcon, setShowSearchIcon] = useState(false);
   const [pageTitle, setPageTitle] = useState('');
   const location = useLocation();
@@ -25,11 +25,15 @@ const Header = () => {
 
   return (
     <header>
-      <img src={profileIcon} alt="Perfil" data-testid="profile-top-btn" />
-      {showSearchIcon && <img src={searchIcon} alt="Pesquisa" data-testid="search-top-btn" />}
+      <img src={ profileIcon } alt="Perfil" data-testid="profile-top-btn" />
+      {showSearchIcon && <img
+        src={ searchIcon }
+        alt="Pesquisa"
+        data-testid="search-top-btn"
+      />}
       <h1 data-testid="page-title">{pageTitle}</h1>
     </header>
   );
-};
+}
 
 export default Header;

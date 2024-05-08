@@ -1,5 +1,5 @@
-import Header from "./Header/Header"
-import Footer from "../Components/Footer"
+import Header from './Header/Header';
+import Footer from './Footer';
 
 function Layout() {
   return (
@@ -7,7 +7,7 @@ function Layout() {
       <Header />
       <Footer />
     </>
-  )
+  );
 }
 
-export default Layout
+export default Layout;
