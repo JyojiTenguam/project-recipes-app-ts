@@ -93,3 +93,48 @@ describe('Footer Test by marcolas', () => {
     expect(document.querySelector('[data-testid="meals-bottom-btn"]')).toBeInTheDocument();
   });
 });
+
+describe('SearchBar testes - Arthur', () => {
+  const searchInputLint = 'search-input';
+  it('SearchBar renderiza corretamente na tela', () => {
+    const { getByTestId } = render(
+      <MemoryRouter initialEntries={ ['/meals'] }>
+        <Header />
+      </MemoryRouter>,
+    );
+    const searchIcon = getByTestId(SEARCH_TOP_BTN);
+    fireEvent.click(searchIcon);
+
+    expect(getByTestId(searchInputLint)).toBeInTheDocument();
+    expect(getByTestId('ingredient-search-radio')).toBeInTheDocument();
+    expect(getByTestId('name-search-radio')).toBeInTheDocument();
+    expect(getByTestId('first-letter-search-radio')).toBeInTheDocument();
+    expect(getByTestId('exec-search-btn')).toBeInTheDocument();
+  });
+  it('SearchBar testas inputs e click nos radios', () => {
+    const { getByTestId } = render(
+      <MemoryRouter initialEntries={ ['/meals'] }>
+        <Header />
+      </MemoryRouter>,
+    );
+    const searchIcon = getByTestId(SEARCH_TOP_BTN);
+    fireEvent.click(searchIcon);
+
+    const ingredientRadio = getByTestId('ingredient-search-radio') as HTMLInputElement;
+    const nameRadio = getByTestId('name-search-radio') as HTMLInputElement;
+    const firstLetterRadio = getByTestId('first-letter-search-radio') as HTMLInputElement;
+    const searchInput = getByTestId(searchInputLint) as HTMLInputElement;
+
+    fireEvent.click(nameRadio);
+    expect(nameRadio).toBeChecked();
+
+    fireEvent.click(firstLetterRadio);
+    expect(firstLetterRadio).toBeChecked();
+
+    fireEvent.click(ingredientRadio);
+    expect(ingredientRadio).toBeChecked();
+
+    fireEvent.change(searchInput, { target: { value: 'chicken' } });
+    expect(searchInput.value).toBe('chicken');
+  });
+});
