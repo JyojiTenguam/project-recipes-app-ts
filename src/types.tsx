@@ -52,6 +52,7 @@ export type MealType = {
   strImageSource: string | null;
   strCreativeCommonsConfirmed: string | null;
   dateModified: string | null;
+  idDrink: string | null;
 };
 
 export type DrinkType = {
@@ -106,4 +107,5 @@ export type DrinkType = {
   strImageAttribution: string;
   strCreativeCommonsConfirmed: string;
   dateModified: string;
+  idMeal: string | null
 };

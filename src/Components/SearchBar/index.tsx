@@ -2,24 +2,21 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import * as ApiMeals from '../../Services/ApiMeals';
 import * as ApiDrinks from '../../Services/ApiDrinks';
+import { DrinkType, MealType } from '../../types';
 
 function SearchBar() {
   const [searchType, setSearchType] = useState('ingredient');
   const [inputValue, setInputValue] = useState('');
+  const [searchResult, setSearchResult] = useState<MealType[] | DrinkType[]>([]);
   const location = useLocation();
   const activePage = location.pathname.includes('/meals') ? 'meals' : 'drinks';
+  const firstLetter = 'first-letter';
 
   const handleSearchTypeChange = (event:React.ChangeEvent<HTMLInputElement>) => {
     setSearchType(event.target.value);
   };
 
-  const handleSearch = async () => {
-    const firstLetter = 'first-letter';
-    if (searchType === firstLetter && inputValue.length !== 1) {
-      window.alert('Your search must have only 1 (one) character');
-      return;
-    }
-
+  const setSearchFunction = () => {
     let searchFunction;
 
     if (activePage === 'meals') {
@@ -51,15 +48,32 @@ function SearchBar() {
           break;
       }
     }
+    return searchFunction;
+  };
 
+  const handleSearch = async () => {
+    if (searchType === firstLetter && inputValue.length !== 1) {
+      window.alert('Your search must have only 1 (one) character');
+      return;
+    }
+    const searchFunction = setSearchFunction();
     if (searchFunction) {
       try {
         const searchData = await searchFunction(inputValue);
-        console.log(searchData); // Criarei função para o retono amanhã
+        if (searchData === null || searchData.length === 0) {
+          window.alert("Sorry, we haven't found any recipes for these filters");
+        } else if (searchData && searchData.length === 1) {
+          const id = searchData[0].idMeal || searchData[0].idDrink;
+          setSearchResult([]);
+          window.location.href = `/${activePage}/${id}`;
+        } else {
+          setSearchResult(searchData);
+        }
       } catch (error) {
         console.error(error);
       }
     }
+    console.log(searchResult);
   };
 
   const handleSearchInputChange = (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -115,6 +129,11 @@ function SearchBar() {
       >
         Buscar
       </button>
+      {/* { searchResult && searchResult.map((drink) => (
+        <p key={ drink.idDrink }>
+          {drink.idDrink}
+        </p>
+      )) } */}
     </div>
   );
 }
