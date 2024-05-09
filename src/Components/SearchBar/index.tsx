@@ -63,7 +63,8 @@ function SearchBar() {
         if (searchData === null || searchData.length === 0) {
           window.alert("Sorry, we haven't found any recipes for these filters");
         } else if (searchData && searchData.length === 1) {
-          const id = searchData[0].idMeal || searchData[0].idDrink;
+          const id = ('idMeal' in searchData[0]) ? searchData[0].idMeal
+            : searchData[0].idDrink;
           setSearchResult([]);
           window.location.href = `/${activePage}/${id}`;
         } else {
@@ -129,11 +130,23 @@ function SearchBar() {
       >
         Buscar
       </button>
-      {/* { searchResult && searchResult.map((drink) => (
-        <p key={ drink.idDrink }>
-          {drink.idDrink}
-        </p>
-      )) } */}
+      {/* {searchResult && searchResult.map((result) => (
+        <div key={ result.idDrink || result.idMeal }>
+          {('strMeal' in result) && (
+            <p>
+              {result.idMeal}
+              {result.strMeal}
+              {result.strIngredient1}
+            </p>
+          )}
+          {('strDrink' in result) && (
+            <p>
+              {result.idDrink}
+              {result.strDrink}
+            </p>
+          )}
+        </div>
+      ))} */}
     </div>
   );
 }
