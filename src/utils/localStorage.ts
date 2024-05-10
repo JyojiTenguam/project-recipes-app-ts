@@ -9,6 +9,7 @@ export interface Recipe {
   doneDate: string;
   tags: string[];
 }
+
 export const getFromLocalStorage = (): Recipe[] => {
   const doneRecipesJSON = localStorage.getItem('doneRecipes');
   return doneRecipesJSON ? JSON.parse(doneRecipesJSON) : [];

@@ -6,8 +6,8 @@ function Layout() {
   return (
     <>
       <Header />
-      <Footer />
       <DoneRecipes />
+      <Footer />
     </>
   );
 }
