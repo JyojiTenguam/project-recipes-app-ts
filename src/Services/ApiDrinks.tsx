@@ -1,4 +1,4 @@
-import { DrinkType } from '../types';
+import { DrinkType } from '../utils/types';
 
 const BASE_URL = 'https://www.thecocktaildb.com/api/json/v1/1';
 

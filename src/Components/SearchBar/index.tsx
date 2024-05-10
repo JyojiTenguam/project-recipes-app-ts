@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import * as ApiMeals from '../../Services/ApiMeals';
 import * as ApiDrinks from '../../Services/ApiDrinks';
-import { DrinkType, MealType } from '../../types';
+import { DrinkType, MealType } from '../../utils/types';
 
 function SearchBar() {
   const [searchType, setSearchType] = useState('ingredient');
