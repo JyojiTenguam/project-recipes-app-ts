@@ -1,4 +1,4 @@
-import { render, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
 import Header from '../Components/Header/index';
@@ -20,6 +20,7 @@ const SEARCH_BTN = 'exec-search-btn';
 const SEARCH_INGREDIENT_RADIO = 'ingredient-search-radio';
 const SEARCH_NAME_RADIO = 'name-search-radio';
 const SEARCH_FIRST_LETTER_RADIO = 'first-letter-search-radio';
+const ERROR_API_RESULT = 'Sorry, we haven\'t found any recipes for these filters';
 
 describe('Header', () => {
   test('renderiza o cabeçalho com o ícone do perfil', () => {
@@ -315,8 +316,8 @@ describe('SearchBar Alerts - Arthur', () => {
 
   it('Deve exibir um alerta quando a busca na API for feita e não houver retorno', async () => {
     it('Deve exibir um alerta quando a busca na API for feita e não houver retorno', async () => {
-      const mockFetchMeals = vi.spyOn(ApiMeals, 'fetchMealsByName').mockRejectedValue(new Error('Sorry, we haven\'t found any recipes for these filters'));
-      const mockFetchDrinks = vi.spyOn(ApiDrinks, 'fetchDrinksByName').mockRejectedValueOnce(new Error('Sorry, we haven\'t found any recipes for these filters'));
+      const mockFetchMeals = vi.spyOn(ApiMeals, 'fetchMealsByName').mockRejectedValue(new Error(ERROR_API_RESULT));
+      const mockFetchDrinks = vi.spyOn(ApiDrinks, 'fetchDrinksByName').mockRejectedValueOnce(new Error(ERROR_API_RESULT));
 
       const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
 
