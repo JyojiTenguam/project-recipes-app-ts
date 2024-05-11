@@ -19,3 +19,9 @@ export const fetchMealsByFirstLetter = async (letter: string): Promise<MealType[
   const data = await response.json();
   return data.meals;
 };
+
+export const fetchMeals = async (): Promise<MealType[]> => {
+  const response = await fetch(`${BASE_URL}/search.php?s=`);
+  const data = await response.json();
+  return data.meals;
+};
