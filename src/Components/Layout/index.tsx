@@ -1,12 +1,14 @@
+import { Outlet } from 'react-router-dom';
 import Header from '../Header';
 import Footer from '../Footer';
-import DoneRecipes from '../DoneRecipes';
 
 function Layout() {
   return (
     <>
       <Header />
-      <DoneRecipes />
+      <main>
+        <Outlet />
+      </main>
       <Footer />
     </>
   );

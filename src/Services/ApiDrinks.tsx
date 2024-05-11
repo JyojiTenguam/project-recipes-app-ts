@@ -20,3 +20,9 @@ export const fetchDrinksByFirstLetter = async (letter: string): Promise<DrinkTyp
   const data = await response.json();
   return data.drinks;
 };
+
+export const fetchDrinks = async (): Promise<DrinkType[]> => {
+  const response = await fetch(`${BASE_URL}/search.php?s=`);
+  const data = await response.json();
+  return data.drinks;
+};

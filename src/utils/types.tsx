@@ -71,7 +71,7 @@ export type DrinkType = {
   strInstructionsIT: string | null;
   strInstructionsZH_HANS: string | null;
   strInstructionsZH_HANT: string | null;
-  strDrinkThumb: string | null;
+  strDrinkThumb: string;
   strIngredient1: string | null;
   strIngredient2: string | null;
   strIngredient3: string | null;
