@@ -3,10 +3,7 @@ import Recipes from '../Recipes';
 
 function Drinks() {
   return (
-    <>
-      <h1>Drnks</h1>
-      <Recipes />
-    </>
+    <Recipes />
   );
 }
 

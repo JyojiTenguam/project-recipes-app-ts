@@ -51,7 +51,7 @@ function SearchBar() {
           setSearchResult(searchData);
         }
       } catch (error) {
-        console.error(error);
+        window.alert("Sorry, we haven't found any recipes for these filters");
       }
     }
     console.log(searchResult);
