@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
@@ -21,6 +20,11 @@ import * as ApiMeals from '../Services/ApiMeals';
 import * as ApiDrinks from '../Services/ApiDrinks';
 
 const SEARCH_TOP_BTN = 'search-top-btn';
+const SEARCH_INPUT = 'search-input';
+const SEARCH_BTN = 'exec-search-btn';
+const SEARCH_INGREDIENT_RADIO = 'ingredient-search-radio';
+const SEARCH_NAME_RADIO = 'name-search-radio';
+const SEARCH_FIRST_LETTER_RADIO = 'first-letter-search-radio';
 
 describe('Header', () => {
   test('renderiza o cabeçalho com o ícone do perfil', () => {
@@ -73,7 +77,7 @@ describe('Header', () => {
     );
     const searchIcon = getByTestId(SEARCH_TOP_BTN);
     fireEvent.click(searchIcon);
-    const searchInput = getByTestId('search-input');
+    const searchInput = getByTestId(SEARCH_INPUT);
     expect(searchInput).toBeInTheDocument();
   });
 
@@ -111,7 +115,7 @@ describe('Footer Test by marcolas', () => {
 });
 
 describe('SearchBar testes - Arthur', () => {
-  const searchInputLint = 'search-input';
+  const searchInputLint = SEARCH_INPUT;
   it('SearchBar renderiza corretamente na tela', () => {
     const { getByTestId } = render(
       <MemoryRouter initialEntries={ ['/meals'] }>
@@ -122,10 +126,10 @@ describe('SearchBar testes - Arthur', () => {
     fireEvent.click(searchIcon);
 
     expect(getByTestId(searchInputLint)).toBeInTheDocument();
-    expect(getByTestId('ingredient-search-radio')).toBeInTheDocument();
-    expect(getByTestId('name-search-radio')).toBeInTheDocument();
-    expect(getByTestId('first-letter-search-radio')).toBeInTheDocument();
-    expect(getByTestId('exec-search-btn')).toBeInTheDocument();
+    expect(getByTestId(SEARCH_INGREDIENT_RADIO)).toBeInTheDocument();
+    expect(getByTestId(SEARCH_NAME_RADIO)).toBeInTheDocument();
+    expect(getByTestId(SEARCH_FIRST_LETTER_RADIO)).toBeInTheDocument();
+    expect(getByTestId(SEARCH_BTN)).toBeInTheDocument();
   });
   it('SearchBar testas inputs e click nos radios', () => {
     const { getByTestId } = render(
@@ -136,9 +140,9 @@ describe('SearchBar testes - Arthur', () => {
     const searchIcon = getByTestId(SEARCH_TOP_BTN);
     fireEvent.click(searchIcon);
 
-    const ingredientRadio = getByTestId('ingredient-search-radio') as HTMLInputElement;
-    const nameRadio = getByTestId('name-search-radio') as HTMLInputElement;
-    const firstLetterRadio = getByTestId('first-letter-search-radio') as HTMLInputElement;
+    const ingredientRadio = getByTestId(SEARCH_INGREDIENT_RADIO) as HTMLInputElement;
+    const nameRadio = getByTestId(SEARCH_NAME_RADIO) as HTMLInputElement;
+    const firstLetterRadio = getByTestId(SEARCH_FIRST_LETTER_RADIO) as HTMLInputElement;
     const searchInput = getByTestId(searchInputLint) as HTMLInputElement;
 
     fireEvent.click(nameRadio);
@@ -175,11 +179,11 @@ describe('SearchBar chamada de API Meals - Arthur', () => {
     const searchIcon = getByTestId(SEARCH_TOP_BTN);
     fireEvent.click(searchIcon);
 
-    fireEvent.click(getByTestId('ingredient-search-radio'));
+    fireEvent.click(getByTestId(SEARCH_INGREDIENT_RADIO));
 
-    fireEvent.change(getByTestId('search-input'), { target: { value: 'chicken_breast' } });
+    fireEvent.change(getByTestId(SEARCH_INPUT), { target: { value: 'chicken_breast' } });
 
-    fireEvent.click(getByTestId('exec-search-btn'));
+    fireEvent.click(getByTestId(SEARCH_BTN));
 
     expect(mockFetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast');
     expect(mockFetch).toHaveBeenCalledTimes(1);
@@ -203,11 +207,11 @@ describe('SearchBar chamada de API Meals - Arthur', () => {
     const searchIcon = getByTestId(SEARCH_TOP_BTN);
     fireEvent.click(searchIcon);
 
-    fireEvent.click(getByTestId('name-search-radio'));
+    fireEvent.click(getByTestId(SEARCH_NAME_RADIO));
 
-    fireEvent.change(getByTestId('search-input'), { target: { value: 'Arrabiata' } });
+    fireEvent.change(getByTestId(SEARCH_INPUT), { target: { value: 'Arrabiata' } });
 
-    fireEvent.click(getByTestId('exec-search-btn'));
+    fireEvent.click(getByTestId(SEARCH_BTN));
 
     expect(mockFetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata');
     expect(window.location.href).toBe('http://localhost:3000/');
@@ -230,11 +234,11 @@ describe('SearchBar chamada de API Meals - Arthur', () => {
     const searchIcon = getByTestId(SEARCH_TOP_BTN);
     fireEvent.click(searchIcon);
 
-    fireEvent.click(getByTestId('first-letter-search-radio'));
+    fireEvent.click(getByTestId(SEARCH_FIRST_LETTER_RADIO));
 
-    fireEvent.change(getByTestId('search-input'), { target: { value: 'a' } });
+    fireEvent.change(getByTestId(SEARCH_INPUT), { target: { value: 'a' } });
 
-    fireEvent.click(getByTestId('exec-search-btn'));
+    fireEvent.click(getByTestId(SEARCH_BTN));
 
     expect(mockFetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?f=a');
   });
@@ -259,11 +263,11 @@ describe('SearchBar Funcionalidade API Drinks - Arthur', () => {
     const searchIcon = getByTestId(SEARCH_TOP_BTN);
     fireEvent.click(searchIcon);
 
-    fireEvent.click(getByTestId('ingredient-search-radio'));
+    fireEvent.click(getByTestId(SEARCH_INGREDIENT_RADIO));
 
-    fireEvent.change(getByTestId('search-input'), { target: { value: 'salt' } });
+    fireEvent.change(getByTestId(SEARCH_INPUT), { target: { value: 'salt' } });
 
-    fireEvent.click(getByTestId('exec-search-btn'));
+    fireEvent.click(getByTestId(SEARCH_BTN));
 
     expect(mockFetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=salt');
   });
@@ -285,11 +289,11 @@ describe('SearchBar Funcionalidade API Drinks - Arthur', () => {
     const searchIcon = getByTestId(SEARCH_TOP_BTN);
     fireEvent.click(searchIcon);
 
-    fireEvent.click(getByTestId('name-search-radio'));
+    fireEvent.click(getByTestId(SEARCH_NAME_RADIO));
 
-    fireEvent.change(getByTestId('search-input'), { target: { value: 'Aquamarine' } });
+    fireEvent.change(getByTestId(SEARCH_INPUT), { target: { value: 'Aquamarine' } });
 
-    fireEvent.click(getByTestId('exec-search-btn'));
+    fireEvent.click(getByTestId(SEARCH_BTN));
 
     expect(mockFetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Aquamarine');
   });
@@ -310,11 +314,11 @@ describe('SearchBar Funcionalidade API Drinks - Arthur', () => {
     const searchIcon = getByTestId(SEARCH_TOP_BTN);
     fireEvent.click(searchIcon);
 
-    fireEvent.click(getByTestId('first-letter-search-radio'));
+    fireEvent.click(getByTestId(SEARCH_FIRST_LETTER_RADIO));
 
-    fireEvent.change(getByTestId('search-input'), { target: { value: 'y' } });
+    fireEvent.change(getByTestId(SEARCH_INPUT), { target: { value: 'y' } });
 
-    fireEvent.click(getByTestId('exec-search-btn'));
+    fireEvent.click(getByTestId(SEARCH_BTN));
 
     expect(mockFetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?f=y');
   });
@@ -334,11 +338,11 @@ describe('SearchBar Alerts - Arthur', () => {
     const searchIcon = getByTestId(SEARCH_TOP_BTN);
     fireEvent.click(searchIcon);
 
-    fireEvent.click(getByTestId('first-letter-search-radio'));
+    fireEvent.click(getByTestId(SEARCH_FIRST_LETTER_RADIO));
 
-    fireEvent.change(getByTestId('search-input'), { target: { value: 'aaa' } });
+    fireEvent.change(getByTestId(SEARCH_INPUT), { target: { value: 'aaa' } });
 
-    fireEvent.click(getByTestId('exec-search-btn'));
+    fireEvent.click(getByTestId(SEARCH_BTN));
 
     expect(alertMock).toHaveBeenCalledWith('Your search must have only 1 (one) character');
     expect(mockFetch).not.toHaveBeenCalled();
@@ -357,10 +361,10 @@ describe('SearchBar Alerts - Arthur', () => {
         </MemoryRouter>,
       );
 
-      const searchInput = getByTestId('search-input');
+      const searchInput = getByTestId(SEARCH_INPUT);
       fireEvent.change(searchInput, { target: { value: 'sicparvismagna' } });
 
-      const searchButton = getByTestId('exec-search-btn');
+      const searchButton = getByTestId(SEARCH_BTN);
       fireEvent.click(searchButton);
       await waitFor(() => {
         expect(alertMock).toHaveBeenCalledWith(expect.stringMatching(/Sorry, we haven't found any recipes for these filters/));
@@ -385,11 +389,11 @@ describe('SearchBar Alerts - Arthur', () => {
     const searchIcon = getByTestId(SEARCH_TOP_BTN);
     fireEvent.click(searchIcon);
 
-    fireEvent.click(getByTestId('name-search-radio'));
+    fireEvent.click(getByTestId(SEARCH_NAME_RADIO));
 
-    fireEvent.change(getByTestId('search-input'), { target: { value: 'sicparvismagna' } });
+    fireEvent.change(getByTestId(SEARCH_INPUT), { target: { value: 'sicparvismagna' } });
 
-    fireEvent.click(getByTestId('exec-search-btn'));
+    fireEvent.click(getByTestId(SEARCH_BTN));
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalled();
