@@ -1,8 +1,24 @@
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+/* eslint-disable sonarjs/no-duplicate-string */
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, BrowserRouter } from 'react-router-dom';
+import { vi } from 'vitest';
+import React from 'react';
 import Header from '../Components/Header/index';
 import Footer from '../Components/Footer';
+import Login from '../Components/Login';
+import Meals from '../Components/Meals';
+import Profile from '../Components/Profile';
+import Drinks from '../Components/Drinks';
+import FavoriteRecipes from '../Components/FavoriteRecipes';
+import mealsByIngredient from './mocks/mealsByIngredient';
+import oneResultMeal from './mocks/oneResultMeal';
+import mealByFLetter from './mocks/mealByFLetter';
+import drinksByIngredient from './mocks/drinksByIngredient';
+import oneResultDrink from './mocks/oneResultDrink';
+import drinkByFLetter from './mocks/drinkByFLetter';
+import SearchBar from '../Components/SearchBar';
+import * as ApiMeals from '../Services/ApiMeals';
+import * as ApiDrinks from '../Services/ApiDrinks';
 
 const SEARCH_TOP_BTN = 'search-top-btn';
 
@@ -136,5 +152,288 @@ describe('SearchBar testes - Arthur', () => {
 
     fireEvent.change(searchInput, { target: { value: 'chicken' } });
     expect(searchInput.value).toBe('chicken');
+  });
+});
+
+describe('SearchBar chamada de API Meals - Arthur', () => {
+  afterEach(() => vi.clearAllMocks());
+
+  it('SearchBar busca por ingrediente', async () => {
+    const MockAPI = {
+      ok: true,
+      status: 200,
+      json: async () => mealsByIngredient,
+    } as Response;
+
+    const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockAPI);
+
+    const { getByTestId } = render(
+      <MemoryRouter initialEntries={ ['/meals'] }>
+        <Header />
+      </MemoryRouter>,
+    );
+    const searchIcon = getByTestId(SEARCH_TOP_BTN);
+    fireEvent.click(searchIcon);
+
+    fireEvent.click(getByTestId('ingredient-search-radio'));
+
+    fireEvent.change(getByTestId('search-input'), { target: { value: 'chicken_breast' } });
+
+    fireEvent.click(getByTestId('exec-search-btn'));
+
+    expect(mockFetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast');
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('Deve buscar corretamente por nome quando o radio Name é selecionado', async () => {
+    const MockAPI = {
+      ok: true,
+      status: 200,
+      json: async () => oneResultMeal,
+    } as Response;
+
+    const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockAPI);
+
+    const { getByTestId } = render(
+      <MemoryRouter initialEntries={ ['/meals'] }>
+        <Header />
+      </MemoryRouter>,
+    );
+
+    const searchIcon = getByTestId(SEARCH_TOP_BTN);
+    fireEvent.click(searchIcon);
+
+    fireEvent.click(getByTestId('name-search-radio'));
+
+    fireEvent.change(getByTestId('search-input'), { target: { value: 'Arrabiata' } });
+
+    fireEvent.click(getByTestId('exec-search-btn'));
+
+    expect(mockFetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata');
+    expect(window.location.href).toBe('http://localhost:3000/');
+  });
+
+  it('Deve buscar corretamente pela primeira letra quando o radio First letter é selecionado', async () => {
+    const MockAPI = {
+      ok: true,
+      status: 200,
+      json: async () => mealByFLetter,
+    } as Response;
+
+    const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockAPI);
+
+    const { getByTestId } = render(
+      <MemoryRouter initialEntries={ ['/meals'] }>
+        <Header />
+      </MemoryRouter>,
+    );
+    const searchIcon = getByTestId(SEARCH_TOP_BTN);
+    fireEvent.click(searchIcon);
+
+    fireEvent.click(getByTestId('first-letter-search-radio'));
+
+    fireEvent.change(getByTestId('search-input'), { target: { value: 'a' } });
+
+    fireEvent.click(getByTestId('exec-search-btn'));
+
+    expect(mockFetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?f=a');
+  });
+});
+
+describe('SearchBar Funcionalidade API Drinks - Arthur', () => {
+  afterEach(() => vi.clearAllMocks());
+  it('Deve buscar corretamente por ingrediente na API de bebidas quando o radio Ingredient é selecionado', async () => {
+    const MockAPI = {
+      ok: true,
+      status: 200,
+      json: async () => drinksByIngredient,
+    } as Response;
+
+    const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockAPI);
+
+    const { getByTestId } = render(
+      <MemoryRouter initialEntries={ ['/drinks'] }>
+        <Header />
+      </MemoryRouter>,
+    );
+    const searchIcon = getByTestId(SEARCH_TOP_BTN);
+    fireEvent.click(searchIcon);
+
+    fireEvent.click(getByTestId('ingredient-search-radio'));
+
+    fireEvent.change(getByTestId('search-input'), { target: { value: 'salt' } });
+
+    fireEvent.click(getByTestId('exec-search-btn'));
+
+    expect(mockFetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=salt');
+  });
+
+  it('Deve buscar corretamente por nome na API de bebidas quando o radio Name é selecionado', async () => {
+    const MockAPI = {
+      ok: true,
+      status: 200,
+      json: async () => oneResultDrink,
+    } as Response;
+
+    const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockAPI);
+
+    const { getByTestId } = render(
+      <MemoryRouter initialEntries={ ['/drinks'] }>
+        <Header />
+      </MemoryRouter>,
+    );
+    const searchIcon = getByTestId(SEARCH_TOP_BTN);
+    fireEvent.click(searchIcon);
+
+    fireEvent.click(getByTestId('name-search-radio'));
+
+    fireEvent.change(getByTestId('search-input'), { target: { value: 'Aquamarine' } });
+
+    fireEvent.click(getByTestId('exec-search-btn'));
+
+    expect(mockFetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Aquamarine');
+  });
+
+  it('Deve buscar corretamente pela primeira letra na API de bebidas quando o radio First letter é selecionado', async () => {
+    const MockAPI = {
+      ok: true,
+      status: 200,
+      json: async () => drinkByFLetter,
+    } as Response;
+
+    const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockAPI);
+    const { getByTestId } = render(
+      <MemoryRouter initialEntries={ ['/drinks'] }>
+        <Header />
+      </MemoryRouter>,
+    );
+    const searchIcon = getByTestId(SEARCH_TOP_BTN);
+    fireEvent.click(searchIcon);
+
+    fireEvent.click(getByTestId('first-letter-search-radio'));
+
+    fireEvent.change(getByTestId('search-input'), { target: { value: 'y' } });
+
+    fireEvent.click(getByTestId('exec-search-btn'));
+
+    expect(mockFetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?f=y');
+  });
+});
+
+describe('SearchBar Alerts - Arthur', () => {
+  afterEach(() => vi.clearAllMocks());
+  it('Deve exibir um alerta quando a busca na API for feita com mais de uma letra e o radio First letter estiver selecionado', async () => {
+    const mockFetch = vi.spyOn(global, 'fetch');
+    const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+
+    const { getByTestId } = render(
+      <MemoryRouter initialEntries={ ['/meals'] }>
+        <Header />
+      </MemoryRouter>,
+    );
+    const searchIcon = getByTestId(SEARCH_TOP_BTN);
+    fireEvent.click(searchIcon);
+
+    fireEvent.click(getByTestId('first-letter-search-radio'));
+
+    fireEvent.change(getByTestId('search-input'), { target: { value: 'aaa' } });
+
+    fireEvent.click(getByTestId('exec-search-btn'));
+
+    expect(alertMock).toHaveBeenCalledWith('Your search must have only 1 (one) character');
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it('Deve exibir um alerta quando a busca na API for feita e não houver retorno', async () => {
+    it('Deve exibir um alerta quando a busca na API for feita e não houver retorno', async () => {
+      const mockFetchMeals = vi.spyOn(ApiMeals, 'fetchMealsByName').mockRejectedValue(new Error('Sorry, we haven\'t found any recipes for these filters'));
+      const mockFetchDrinks = vi.spyOn(ApiDrinks, 'fetchDrinksByName').mockRejectedValueOnce(new Error('Sorry, we haven\'t found any recipes for these filters'));
+
+      const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+
+      const { getByTestId } = render(
+        <MemoryRouter initialEntries={ ['/meals'] }>
+          <SearchBar />
+        </MemoryRouter>,
+      );
+
+      const searchInput = getByTestId('search-input');
+      fireEvent.change(searchInput, { target: { value: 'sicparvismagna' } });
+
+      const searchButton = getByTestId('exec-search-btn');
+      fireEvent.click(searchButton);
+      await waitFor(() => {
+        expect(alertMock).toHaveBeenCalledWith(expect.stringMatching(/Sorry, we haven't found any recipes for these filters/));
+      });
+
+      expect(mockFetchMeals).toHaveBeenCalled();
+      expect(mockFetchDrinks).toHaveBeenCalled();
+    });
+  });
+
+  it('Catch console error', async () => {
+    const mockFetch = vi.spyOn(global, 'fetch').mockRejectedValue('error');
+    const consoleErrorSpy = vi.spyOn(console, 'error');
+
+    const { getByTestId } = render(
+      <MemoryRouter initialEntries={ ['/meals'] }>
+        <Header />
+      </MemoryRouter>,
+    );
+    mockFetch.mockRejectedValueOnce('error');
+
+    const searchIcon = getByTestId(SEARCH_TOP_BTN);
+    fireEvent.click(searchIcon);
+
+    fireEvent.click(getByTestId('name-search-radio'));
+
+    fireEvent.change(getByTestId('search-input'), { target: { value: 'sicparvismagna' } });
+
+    fireEvent.click(getByTestId('exec-search-btn'));
+
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalled();
+      expect(consoleErrorSpy).toHaveBeenCalled();
+    });
+  });
+});
+
+describe('Login', () => {
+  test('renders the login heading', () => {
+    const { getByText } = render(<Login />);
+    const headingElement = getByText('Login');
+    expect(headingElement).toBeInTheDocument();
+  });
+});
+
+describe('Meals', () => {
+  test('renders the "Meals" heading', () => {
+    const { getByText } = render(<Meals />);
+    const headingElement = getByText('Meals');
+    expect(headingElement).toBeInTheDocument();
+  });
+});
+
+describe('Profile', () => {
+  test('renders the profile heading', () => {
+    const { getByText } = render(<Profile />);
+    const headingElement = getByText('Profile');
+    expect(headingElement).toBeInTheDocument();
+  });
+});
+
+describe('Drinks', () => {
+  test('renders the "Drinks" heading', () => {
+    const { getByText } = render(<Drinks />);
+    const headingElement = getByText('Drinks');
+    expect(headingElement).toBeInTheDocument();
+  });
+});
+
+describe('FavoriteRecipes', () => {
+  test('renders the "FavoriteRecipes" heading', () => {
+    const { getByText } = render(<FavoriteRecipes />);
+    const headingElement = getByText('FavoriteRecipes');
+    expect(headingElement).toBeInTheDocument();
   });
 });
