@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 type RecipeCardProps = {
   recipeName: string;
   recipeThumb: string;
