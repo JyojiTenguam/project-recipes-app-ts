@@ -15,24 +15,23 @@ function Recipes() {
   useEffect(() => {
     const fetchData = async () => {
       if (activePage === 'meals') {
-        const response = await fetchMeals();
-        setMealRecipes(response.slice(0, 12));
+        const response:MealType[] = await fetchMeals();
+        setMealRecipes(response);
       } else {
-        const response = await fetchDrinks();
-        setDrinkRecipes(response.slice(0, 12));
+        const response:DrinkType[] = await fetchDrinks();
+        setDrinkRecipes(response);
       }
     };
 
     fetchData();
   }, [activePage]);
 
-  console.log(mealRecipes);
-  console.log(drinkRecipes);
   return (
     <>
       <h1>Meals by API:</h1>
       <div>
-        {activePage === 'meals' && mealRecipes.map((recipe, index) => (
+        {activePage === 'meals' && mealRecipes
+        && mealRecipes.slice(0, 12).map((recipe, index) => (
           <RecipeCard
             data-testid={ `${index}-recipe-card` }
             key={ recipe.idMeal }
@@ -42,7 +41,8 @@ function Recipes() {
             index={ index }
           />
         ))}
-        {activePage === 'drinks' && drinkRecipes.map((recipe, index) => (
+        {activePage === 'drinks' && drinkRecipes
+        && drinkRecipes.slice(0, 12).map((recipe, index) => (
           <RecipeCard
             data-testid={ `${index}-recipe-card` }
             key={ recipe.idDrink }
