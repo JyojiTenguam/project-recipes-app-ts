@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import * as ApiMeals from '../../Services/ApiMeals';
 import * as ApiDrinks from '../../Services/ApiDrinks';
-import { DrinkType, MealType } from '../../types';
+import { DrinkType, MealType } from '../../utils/types';
 
 function SearchBar() {
   const [searchType, setSearchType] = useState('ingredient');
@@ -16,39 +16,17 @@ function SearchBar() {
     setSearchType(event.target.value);
   };
 
-  const setSearchFunction = () => {
-    let searchFunction;
-
-    if (activePage === 'meals') {
-      switch (searchType) {
-        case 'ingredient':
-          searchFunction = ApiMeals.fetchMealsByIngredient;
-          break;
-        case 'name':
-          searchFunction = ApiMeals.fetchMealsByName;
-          break;
-        case firstLetter:
-          searchFunction = ApiMeals.fetchMealsByFirstLetter;
-          break;
-        default:
-          break;
-      }
-    } else if (activePage === 'drinks') {
-      switch (searchType) {
-        case 'ingredient':
-          searchFunction = ApiDrinks.fetchDrinksByIngredient;
-          break;
-        case 'name':
-          searchFunction = ApiDrinks.fetchDrinksByName;
-          break;
-        case firstLetter:
-          searchFunction = ApiDrinks.fetchDrinksByFirstLetter;
-          break;
-        default:
-          break;
-      }
-    }
-    return searchFunction;
+  const searchFunctions = {
+    meals: {
+      ingredient: ApiMeals.fetchMealsByIngredient,
+      name: ApiMeals.fetchMealsByName,
+      [firstLetter]: ApiMeals.fetchMealsByFirstLetter,
+    },
+    drinks: {
+      ingredient: ApiDrinks.fetchDrinksByIngredient,
+      name: ApiDrinks.fetchDrinksByName,
+      [firstLetter]: ApiDrinks.fetchDrinksByFirstLetter,
+    },
   };
 
   const handleSearch = async () => {
@@ -56,7 +34,9 @@ function SearchBar() {
       window.alert('Your search must have only 1 (one) character');
       return;
     }
-    const searchFunction = setSearchFunction();
+    const seda = searchFunctions[activePage as keyof typeof searchFunctions];
+    const searchFunction = seda[searchType as keyof typeof seda];
+
     if (searchFunction) {
       try {
         const searchData = await searchFunction(inputValue);
@@ -130,8 +110,8 @@ function SearchBar() {
       >
         Buscar
       </button>
-      {/* {searchResult && searchResult.map((result) => (
-        <div key={ result.idDrink || result.idMeal }>
+      {/* {searchResult && searchResult.map((result, i) => (
+        <div key={ i }>
           {('strMeal' in result) && (
             <p>
               {result.idMeal}
