@@ -1,4 +1,4 @@
-import { DrinkType } from '../utils/types';
+import { CategoryType, DrinkType } from '../utils/types';
 
 const BASE_URL = 'https://www.thecocktaildb.com/api/json/v1/1';
 
@@ -27,8 +27,14 @@ export const fetchDrinks = async (): Promise<DrinkType[]> => {
   return data.drinks;
 };
 
-export const fetchDrinksByCategory = async (): Promise<DrinkType[]> => {
+export const fetchDrinksByCategory = async (): Promise<CategoryType[]> => {
   const response = await fetch(`${BASE_URL}/list.php?c=list`);
+  const data = await response.json();
+  return data.drinks;
+};
+export const fetchFilterDrinksByCategory = async (cat:string):
+Promise<DrinkType[]> => {
+  const response = await fetch(`${BASE_URL}/filter.php?c=${cat}`);
   const data = await response.json();
   return data.drinks;
 };

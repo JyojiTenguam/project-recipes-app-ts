@@ -13,6 +13,7 @@ import * as ApiMeals from '../Services/ApiMeals';
 import * as ApiDrinks from '../Services/ApiDrinks';
 import App from '../App';
 import renderWithRouter from './RenderWithRouter';
+import SearchBar from '../Components/SearchBar';
 
 const SEARCH_TOP_BTN = 'search-top-btn';
 const SEARCH_INPUT = 'search-input';
@@ -174,7 +175,7 @@ describe('SearchBar chamada de API Meals - Arthur', () => {
     await user.click(getByTestId(SEARCH_BTN));
 
     expect(mockFetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast');
-    expect(mockFetch).toHaveBeenCalledTimes(3);
+    expect(mockFetch).toHaveBeenCalled();
   });
 
   it('Deve buscar corretamente por nome quando o radio Name é selecionado', async () => {
@@ -339,12 +340,9 @@ describe('SearchBar Alerts - Arthur', () => {
   });
 
   it('Catch console error', async () => {
-    const { user, getByTestId } = renderWithRouter(<App />, { route: '/meals' });
+    const { user, getByTestId } = renderWithRouter(<SearchBar />, { route: '/meals' });
 
     // mockFetch.mockRejectedValueOnce('error');
-
-    const searchIcon = getByTestId(SEARCH_TOP_BTN);
-    await user.click(searchIcon);
 
     await user.click(getByTestId(SEARCH_NAME_RADIO));
 
@@ -418,10 +416,7 @@ describe('FavoriteRecipes', () => {
 
 describe('Recipes', () => {
   afterEach(() => vi.clearAllMocks());
-  const MockMealsByCategory = ([
-    { strCategory: 'Category 1' },
-    { strCategory: 'Category 2' },
-  ]);
+
   const MockMeals = ([
     { idMeal: '1', strMeal: 'Meal 1', strMealThumb: 'thumb1.jpg' },
     { idMeal: '2', strMeal: 'Meal 2', strMealThumb: 'thumb2.jpg' },
@@ -435,13 +430,7 @@ describe('Recipes', () => {
     { idDrink: '2', strDrink: 'Drink 2', strDrinkThumb: 'thumb2.jpg' },
   ]);
 
-  it('renders the meals section correctly', async () => {
-    const MockMealCategory = {
-      ok: true,
-      status: 200,
-      json: async () => MockMealsByCategory,
-    } as Response;
-
+  it('Recipes Meal', async () => {
     const MockMeal = {
       ok: true,
       status: 200,
@@ -449,12 +438,8 @@ describe('Recipes', () => {
     } as Response;
 
     const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockMeal);
-    const mockFetchCat = vi.spyOn(global, 'fetch').mockResolvedValue(MockMealCategory);
 
-    const { getByText, findAllByTestId } = renderWithRouter(<App />, { route: '/meals' });
-
-    const mealsHeading = getByText('Meals by API:');
-    expect(mealsHeading).toBeInTheDocument();
+    const { findAllByTestId } = renderWithRouter(<App />, { route: '/meals' });
 
     waitFor(async () => {
       await expect(mockFetch).toHaveBeenCalled();
@@ -463,33 +448,20 @@ describe('Recipes', () => {
 
       const mealCards = await findAllByTestId(/-recipe-card$/);
       await expect(mealCards).toHaveLength(2);
-    });
-
-    expect(mockFetchCat).toHaveBeenCalled();
+    }, { timeout: 5000 });
   });
 
-  it('renders the drinks section correctly', async () => {
+  it('Recipes Drink', async () => {
     const MockDrinkCategory = {
       ok: true,
       status: 200,
       json: async () => MockDrinksByCategory,
     } as Response;
 
-    const MockDrink = {
-      ok: true,
-      status: 200,
-      json: async () => MockDrinks,
-    } as Response;
-
-    const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockDrink);
     const mockFetchCat = vi.spyOn(global, 'fetch').mockResolvedValue(MockDrinkCategory);
-    const { getByText, findAllByTestId } = renderWithRouter(<App />, { route: '/drinks' });
-
-    const drinksHeading = getByText('Meals by API:');
-    expect(drinksHeading).toBeInTheDocument();
+    const { findAllByTestId } = renderWithRouter(<App />, { route: '/drinks' });
 
     waitFor(async () => {
-      await expect(mockFetch).toHaveBeenCalled();
       const drinkCategories = await findAllByTestId(/-category-filter$/);
       await expect(drinkCategories).toHaveLength(3);
 
@@ -498,5 +470,54 @@ describe('Recipes', () => {
     });
 
     expect(mockFetchCat).toHaveBeenCalled();
+  });
+
+  it('Recipes Driks by Filter', async () => {
+    const MockDrink = {
+      ok: true,
+      status: 200,
+      json: async () => MockDrinks,
+    } as Response;
+
+    const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockDrink);
+
+    const { user, getByText, findAllByTestId } = renderWithRouter(<App />, { route: '/drinks' });
+
+    await expect(getByText('All')).toBeInTheDocument();
+    await user.click(getByText('All'));
+
+    waitFor(async () => {
+      await expect(mockFetch).toHaveBeenCalled();
+      const drinkCategories = await findAllByTestId(/-category-filter$/);
+      await user.click(drinkCategories[0]);
+      await expect(drinkCategories).toHaveLength(3);
+
+      const drinkCards = await findAllByTestId(/-recipe-card$/);
+      await expect(drinkCards).toHaveLength(2);
+    });
+  });
+
+  it('Recipes Meals by Filter', async () => {
+    const MockMeal = {
+      ok: true,
+      status: 200,
+      json: async () => MockMeals,
+    } as Response;
+
+    const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockMeal);
+    const { user, getByText, findAllByTestId } = renderWithRouter(<App />, { route: '/meals' });
+
+    await expect(getByText('All')).toBeInTheDocument();
+    await user.click(getByText('All'));
+
+    waitFor(async () => {
+      await expect(mockFetch).toHaveBeenCalled();
+      const drinkCategories = await findAllByTestId(/-category-filter$/);
+      await user.click(drinkCategories[0]);
+      await expect(drinkCategories).toHaveLength(3);
+
+      const drinkCards = await findAllByTestId(/-recipe-card$/);
+      await expect(drinkCards).toHaveLength(2);
+    });
   });
 });

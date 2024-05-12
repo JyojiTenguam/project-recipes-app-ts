@@ -108,10 +108,6 @@ export type DrinkType = {
   dateModified: string;
 };
 
-export type MealCategoryType = {
-  strCategory: string;
-};
-
-export type DrinkCategoryType = {
+export type CategoryType = {
   strCategory: string;
 };

@@ -1,4 +1,4 @@
-import { MealType } from '../utils/types';
+import { CategoryType, MealType } from '../utils/types';
 
 const BASE_URL = 'https://www.themealdb.com/api/json/v1/1';
 
@@ -26,8 +26,14 @@ export const fetchMeals = async (): Promise<MealType[]> => {
   return data.meals;
 };
 
-export const fetchMealsListByCategory = async (): Promise<MealType[]> => {
+export const fetchMealsListByCategory = async (): Promise<CategoryType[]> => {
   const response = await fetch(`${BASE_URL}/list.php?c=list`);
+  const data = await response.json();
+  return data.meals;
+};
+export const fetchFilterMealsByCategory = async (cat:string):
+Promise<MealType[]> => {
+  const response = await fetch(`${BASE_URL}/filter.php?c=${cat}`);
   const data = await response.json();
   return data.meals;
 };
