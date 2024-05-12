@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import RecipeCard from '../RecipesCard';
-import { fetchDrinks, fetchDrinksByCategory } from '../../Services/ApiDrinks';
-import { fetchMeals, fetchMealsListByCategory } from '../../Services/ApiMeals';
-import { DrinkCategoryType, DrinkType,
+import { fetchDrinks, fetchDrinksByCategory,
+  fetchFilterDrinksByCategory } from '../../Services/ApiDrinks';
+import { fetchFilterMealsByCategory, fetchMeals,
+  fetchMealsListByCategory } from '../../Services/ApiMeals';
+import { DrinkCategoryDetailsType, DrinkCategoryType, DrinkType,
+  MealCategoryDetailsType,
   MealCategoryType, MealType } from '../../utils/types';
 
 function Recipes() {
@@ -11,6 +14,10 @@ function Recipes() {
   const [drinkRecipes, setDrinkRecipes] = useState< DrinkType[]>([]);
   const [mealCategories, setMealCategories] = useState<MealCategoryType[]>([]);
   const [drinkCategories, setDrinkCategories] = useState< DrinkCategoryType[]>([]);
+  const [mealFiltredRecipes, setMealFiltredRecipes] = useState<
+  MealCategoryDetailsType[]>([]);
+  const [drinkFiltredRecipes, setDrinkFiltredRecipes] = useState<
+  DrinkCategoryDetailsType[]>([]);
 
   const location = useLocation();
   const activePage = location.pathname.includes('/meals') ? 'meals' : 'drinks';
@@ -33,17 +40,38 @@ function Recipes() {
     fetchData();
   }, [activePage]);
 
+  const handleFilter = async (category: string) => {
+    if (activePage === 'meals') {
+      const recipes = await fetchFilterMealsByCategory(category);
+      setMealFiltredRecipes(recipes);
+    } else {
+      const recipes = await fetchFilterDrinksByCategory(category);
+      setDrinkFiltredRecipes(recipes);
+    }
+  };
+
+  const handleClearFilters = async () => {
+    if (activePage === 'meals') {
+      setMealFiltredRecipes([]);
+    }
+    setDrinkFiltredRecipes([]);
+  };
+
   return (
     <>
-      <h1>Meals by API:</h1>
       <div>
+        <button onClick={ () => handleClearFilters() }>All</button>
         {activePage === 'meals' && mealCategories && mealCategories.length > 0
     && mealCategories.slice(0, 5).map((category, index) => (
       <div
         key={ index }
         data-testid={ `${category.strCategory}-category-filter` }
       >
-        <p>{category.strCategory}</p>
+        <button
+          onClick={ () => handleFilter(category.strCategory) }
+        >
+          {category.strCategory}
+        </button>
       </div>
     ))}
         {activePage === 'drinks' && drinkCategories && drinkCategories.length > 0
@@ -52,34 +80,57 @@ function Recipes() {
         key={ index }
         data-testid={ `${category.strCategory}-category-filter` }
       >
-        <p>{category.strCategory}</p>
+        <button
+          onClick={ () => handleFilter(category.strCategory) }
+        >
+          {category.strCategory}
+        </button>
       </div>
     ))}
       </div>
-
       <div>
-        {activePage === 'meals' && mealRecipes
-        && mealRecipes.slice(0, 12).map((recipe, index) => (
-          <RecipeCard
-            data-testid={ `${index}-recipe-card` }
-            key={ recipe.idMeal }
-            recipeName={ recipe.strMeal }
-            recipeThumb={ recipe.strMealThumb }
-            recipeId={ recipe.idMeal }
-            index={ index }
-          />
-        ))}
-        {activePage === 'drinks' && drinkRecipes
-        && drinkRecipes.slice(0, 12).map((recipe, index) => (
-          <RecipeCard
-            data-testid={ `${index}-recipe-card` }
-            key={ recipe.idDrink }
-            recipeName={ recipe.strDrink }
-            recipeThumb={ recipe.strDrinkThumb }
-            recipeId={ recipe.idDrink }
-            index={ index }
-          />
-        ))}
+        {activePage === 'meals' && mealFiltredRecipes.length > 0
+          ? mealFiltredRecipes.slice(0, 12).map((recipe, index) => (
+            <RecipeCard
+              data-testid={ `${index}-recipe-card` }
+              key={ recipe.idMeal }
+              recipeName={ recipe.strMeal }
+              recipeThumb={ recipe.strMealThumb }
+              recipeId={ recipe.idMeal }
+              index={ index }
+            />
+          ))
+          : mealRecipes && mealRecipes.slice(0, 12).map((recipe, index) => (
+            <RecipeCard
+              data-testid={ `${index}-recipe-card` }
+              key={ recipe.idMeal }
+              recipeName={ recipe.strMeal }
+              recipeThumb={ recipe.strMealThumb }
+              recipeId={ recipe.idMeal }
+              index={ index }
+            />
+          ))}
+        {activePage === 'drinks' && drinkFiltredRecipes.length > 0
+          ? drinkFiltredRecipes.slice(0, 12).map((recipe, index) => (
+            <RecipeCard
+              data-testid={ `${index}-recipe-card` }
+              key={ recipe.idDrink }
+              recipeName={ recipe.strDrink }
+              recipeThumb={ recipe.strDrinkThumb }
+              recipeId={ recipe.idDrink }
+              index={ index }
+            />
+          ))
+          : drinkRecipes && drinkRecipes.slice(0, 12).map((recipe, index) => (
+            <RecipeCard
+              data-testid={ `${index}-recipe-card` }
+              key={ recipe.idDrink }
+              recipeName={ recipe.strDrink }
+              recipeThumb={ recipe.strDrinkThumb }
+              recipeId={ recipe.idDrink }
+              index={ index }
+            />
+          ))}
       </div>
     </>
   );

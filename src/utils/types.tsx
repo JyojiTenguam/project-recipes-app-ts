@@ -115,3 +115,15 @@ export type MealCategoryType = {
 export type DrinkCategoryType = {
   strCategory: string;
 };
+
+export type MealCategoryDetailsType = {
+  idMeal: string;
+  strMeal: string;
+  strMealThumb: string;
+};
+
+export type DrinkCategoryDetailsType = {
+  idDrink: string;
+  strDrink: string;
+  strDrinkThumb: string;
+};
