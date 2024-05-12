@@ -26,3 +26,9 @@ export const fetchDrinks = async (): Promise<DrinkType[]> => {
   const data = await response.json();
   return data.drinks;
 };
+
+export const fetchDrinksByCategory = async (): Promise<DrinkType[]> => {
+  const response = await fetch(`${BASE_URL}/list.php?c=list`);
+  const data = await response.json();
+  return data.drinks;
+};

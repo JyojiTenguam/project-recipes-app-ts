@@ -107,3 +107,11 @@ export type DrinkType = {
   strCreativeCommonsConfirmed: string;
   dateModified: string;
 };
+
+export type MealCategoryType = {
+  strCategory: string;
+};
+
+export type DrinkCategoryType = {
+  strCategory: string;
+};

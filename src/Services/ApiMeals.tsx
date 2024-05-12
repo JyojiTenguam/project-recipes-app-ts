@@ -25,3 +25,9 @@ export const fetchMeals = async (): Promise<MealType[]> => {
   const data = await response.json();
   return data.meals;
 };
+
+export const fetchMealsListByCategory = async (): Promise<MealType[]> => {
+  const response = await fetch(`${BASE_URL}/list.php?c=list`);
+  const data = await response.json();
+  return data.meals;
+};
