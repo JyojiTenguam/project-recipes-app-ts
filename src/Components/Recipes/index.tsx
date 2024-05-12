@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import RecipeCard from '../RecipesCard';
 import { fetchDrinks, fetchDrinksByCategory,
   fetchFilterDrinksByCategory } from '../../Services/ApiDrinks';
@@ -45,7 +45,7 @@ function Recipes() {
   }, [activePage, filter]);
 
   const handleFilter = async (category: string) => {
-    if (category === 'filter') {
+    if (category === filter) {
       setFilter('');
     } else {
       setFilter(category);
@@ -75,25 +75,28 @@ function Recipes() {
       <div>
         {activePage === 'meals' && mealRecipes
         && mealRecipes.slice(0, 12).map((recipe, index) => (
-          <RecipeCard
-            data-testid={ `${index}-recipe-card` }
-            key={ recipe.idMeal }
-            recipeName={ recipe.strMeal }
-            recipeThumb={ recipe.strMealThumb }
-            recipeId={ recipe.idMeal }
-            index={ index }
-          />
+          <Link to={ `/meals/${recipe.idMeal}` } key={ recipe.idMeal }>
+            <RecipeCard
+              data-testid={ `${index}-recipe-card` }
+              recipeName={ recipe.strMeal }
+              recipeThumb={ recipe.strMealThumb }
+              recipeId={ recipe.idMeal }
+              index={ index }
+            />
+          </Link>
         ))}
         {activePage === 'drinks' && drinkRecipes
         && drinkRecipes.slice(0, 12).map((recipe, index) => (
-          <RecipeCard
-            data-testid={ `${index}-recipe-card` }
-            key={ recipe.idDrink }
-            recipeName={ recipe.strDrink }
-            recipeThumb={ recipe.strDrinkThumb }
-            recipeId={ recipe.idDrink }
-            index={ index }
-          />
+          <Link to={ `/drinks/${recipe.idDrink}` } key={ recipe.idDrink }>
+            <RecipeCard
+              data-testid={ `${index}-recipe-card` }
+              recipeName={ recipe.strDrink }
+              recipeThumb={ recipe.strDrinkThumb }
+              recipeId={ recipe.idDrink }
+              index={ index }
+            />
+          </Link>
+
         ))}
       </div>
     </>
