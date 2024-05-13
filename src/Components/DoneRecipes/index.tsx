@@ -43,7 +43,7 @@ function DoneRecipes() {
         <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
 
         {/* O input dessa forma com tipo de imagem define a imagem do atributo src como um botão de submit.
-OBS: não se esquecer do prevent Defalt ao criar a lógica do botão */}
+OBS: não se esquecer do prevent Defalt ao criar a lógica do botão. */}
         <input
           data-testid={ `${index}-horizontal-share-btn` }
           type="image"
