@@ -1,0 +1,19 @@
+.header {
+  background-color: #333; /* Cor de fundo */
+  color: white; /* Cor do texto */
+  padding: 20px; /* Espaçamento interno */
+  text-align: center; /* Alinhamento do texto */
+}
+
+/* Estilos para os links do menu */
+.header a {
+  color: white; /* Cor dos links */
+  margin: 0 10px; /* Espaçamento horizontal entre os links */
+  text-decoration: none; /* Remover sublinhado */
+  transition: color 0.3s; /* Transição suave de cor */
+}
+
+/* Estilizar os links do menu quando o mouse passar por cima */
+.header a:hover {
+  color: gold; /* Mudar a cor ao passar o mouse */
+}
