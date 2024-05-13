@@ -13,6 +13,25 @@ function RecipeInProgress() {
   const activePage = location.pathname.includes('/meals') ? 'meals' : 'drinks';
 
   useEffect(() => {
+    const loadProgressFromLocalStorage = () => {
+      const progress = localStorage.getItem(`${activePage}/${idParam}/in-progress`);
+      if (progress) {
+        setCheckedIng(JSON.parse(progress));
+      }
+    };
+    loadProgressFromLocalStorage();
+  }, [activePage, idParam]);
+
+  useEffect(() => {
+    const saveProgressToLocalStorage = () => {
+      localStorage.setItem(`${activePage}/${idParam}/in-progress`, JSON
+        .stringify(checkedIng));
+    };
+
+    saveProgressToLocalStorage();
+  }, [activePage, checkedIng, idParam]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         if (activePage === 'meals') {
@@ -53,7 +72,7 @@ function RecipeInProgress() {
     return ingredients.map((ingredient, index) => (
       <div
         key={ index }
-        data-testid="ingredient-step"
+        data-testid={ `${index}-ingredient-step` }
         style={ {
           textDecoration: checkedIng[index]
             ? 'line-through solid rgb(0, 0, 0)' : 'none' } }
@@ -114,8 +133,10 @@ function RecipeInProgress() {
           {renderIngredients(drinkRecipe)}
           <button data-testid="finish-recipe-btn">Finalizar Receita</button>
         </>)}
-
+      <br />
+      <br />
     </div>
+
   );
 }
 
