@@ -14,6 +14,7 @@ import * as ApiDrinks from '../Services/ApiDrinks';
 import App from '../App';
 import renderWithRouter from './RenderWithRouter';
 import SearchBar from '../Components/SearchBar';
+import mockDrinkCategories from './mocks/mockDrinkCategories';
 
 const SEARCH_TOP_BTN = 'search-top-btn';
 const SEARCH_INPUT = 'search-input';
@@ -480,7 +481,6 @@ describe('Recipes', () => {
     } as Response;
 
     const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockDrink);
-
     const { user, getByText, findAllByTestId } = renderWithRouter(<App />, { route: '/drinks' });
 
     await expect(getByText('All')).toBeInTheDocument();
@@ -512,12 +512,33 @@ describe('Recipes', () => {
 
     waitFor(async () => {
       await expect(mockFetch).toHaveBeenCalled();
-      const drinkCategories = await findAllByTestId(/-category-filter$/);
-      await user.click(drinkCategories[0]);
-      await expect(drinkCategories).toHaveLength(3);
+      const mealCategories = await findAllByTestId(/-category-filter$/);
+      await user.click(mealCategories[0]);
+      await expect(mealCategories).toHaveLength(3);
 
-      const drinkCards = await findAllByTestId(/-recipe-card$/);
-      await expect(drinkCards).toHaveLength(2);
+      const mealCards = await findAllByTestId(/-recipe-card$/);
+      await expect(mealCards).toHaveLength(2);
     });
+  });
+
+  it('Recipes Render', async () => {
+    const MockMeal = {
+      ok: true,
+      status: 200,
+      json: async () => mockDrinkCategories,
+    } as Response;
+
+    const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockMeal);
+    const { user, getByText, findAllByTestId } = renderWithRouter(<App />, { route: '/drinks' });
+
+    await expect(getByText('All')).toBeInTheDocument();
+    await user.click(getByText('All'));
+    const drinkCategories = await findAllByTestId(/-category-filter$/);
+    await user.click(drinkCategories[0]);
+    await expect(mockFetch).toHaveBeenCalled();
+    const drinkCategories2 = await findAllByTestId(/-category-filter$/);
+    await expect(drinkCategories2).toHaveLength(6);
+    await user.click(drinkCategories[5]);
+    await user.click(drinkCategories[5]);
   });
 });
