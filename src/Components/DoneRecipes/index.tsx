@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getFromLocalStorage, Recipe } from '../../utils/localStorage';
 import shareIcon from '../../images/shareIcon.svg';
+
 function DoneRecipes() {
   // Armazena as receitas
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -105,4 +106,5 @@ function DoneRecipes() {
     </div>
   );
 }
+
 export default DoneRecipes;
