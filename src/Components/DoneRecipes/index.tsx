@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getFromLocalStorage, Recipe } from '../../utils/localStorage';
 import shareIcon from '../../images/shareIcon.svg';
-
 function DoneRecipes() {
   // Armazena as receitas
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -9,24 +8,20 @@ function DoneRecipes() {
   const [recipeType, setRecipeType] = useState<'meal' | 'drink' | 'all'>('all');
   // Controlar se a mensagem link é copiada
   const [copied, setCopied] = useState(false);
-
   // Carrega as receitas da localStorage
   useEffect(() => {
     const loadRecipes = () => {
       const fetchLoadRecipes = getFromLocalStorage();
-
       // Atualiza o estado das receitas
       setRecipes(fetchLoadRecipes);
     };
-
     loadRecipes();
   }, []); // Executa apenas uma vez, quando o componente é montado
-
   // Filtra as receitas com base no tipo
   useEffect(() => {
     const filterRecipes = () => {
       if (recipeType === 'all') {
-        // Se for 'all', simplesmente carrega todas as receitas da localStorage
+        // Se for 'all', carrega todas as receitas da localStorage
         const fetchAllRecipes = getFromLocalStorage();
         setRecipes(fetchAllRecipes);
       } else {
@@ -36,15 +31,12 @@ function DoneRecipes() {
         setRecipes(fetchUnicRecipes);
       }
     };
-
     filterRecipes();
   }, [recipeType]); // Atualiza sempre que recipeType mudar
-
   // Função para lidar com o clique nos botões de filtro
   const handleFilter = (type: 'meal' | 'drink' | 'all') => {
     setRecipeType(type);
   };
-
   // Função para lidar com o clique no botão de compartilhar
   const handleShareClick = (recipe: Recipe) => {
     // Monta a URL da receita
@@ -62,7 +54,6 @@ function DoneRecipes() {
         console.error('Erro ao copiar', error);
       });
   };
-
   return (
     <div>
       {/* Botões de filtro para escolher o tipo de receita a ser exibido */}
@@ -114,5 +105,4 @@ function DoneRecipes() {
     </div>
   );
 }
-
 export default DoneRecipes;
