@@ -6,7 +6,7 @@ import Drinks from './Components/Drinks';
 import Profile from './Components/Profile';
 import DoneRecipes from './Components/DoneRecipes';
 import FavoriteRecipes from './Components/FavoriteRecipes';
-import RecipeInProgress from './Components/RecipesInProgress';
+import RecipeInProgress from './Components/RecipeInProgress';
 
 function App() {
   return (

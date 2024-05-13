@@ -54,6 +54,9 @@ function RecipeInProgress() {
       <div
         key={ index }
         data-testid="ingredient-step"
+        style={ {
+          textDecoration: checkedIng[index]
+            ? 'line-through solid rgb(0, 0, 0)' : 'none' } }
       >
         <input
           type="checkbox"
