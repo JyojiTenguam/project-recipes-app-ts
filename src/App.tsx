@@ -9,7 +9,6 @@ import FavoriteRecipes from './Components/FavoriteRecipes';
 import RecipeInProgress from './Components/RecipeInProgress';
 import RecipeDetails from './Components/RecipeDetails';
 
-
 function App() {
   return (
     <Routes>
