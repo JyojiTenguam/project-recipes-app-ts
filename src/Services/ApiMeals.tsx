@@ -31,9 +31,16 @@ export const fetchMealsListByCategory = async (): Promise<CategoryType[]> => {
   const data = await response.json();
   return data.meals;
 };
+
 export const fetchFilterMealsByCategory = async (cat:string):
 Promise<MealType[]> => {
   const response = await fetch(`${BASE_URL}/filter.php?c=${cat}`);
   const data = await response.json();
   return data.meals;
+};
+
+export const fetchMealById = async (id: string): Promise<MealType> => {
+  const response = await fetch(`${BASE_URL}/lookup.php?i=${id}`);
+  const data = await response.json();
+  return data.meals[0];
 };
