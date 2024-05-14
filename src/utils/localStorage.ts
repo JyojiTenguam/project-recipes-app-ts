@@ -10,7 +10,7 @@ export interface Recipe {
   tags: string[];
 }
 
-export const getFromLocalStorage = (): Recipe[] => {
-  const doneRecipesJSON = localStorage.getItem('doneRecipes');
-  return doneRecipesJSON ? JSON.parse(doneRecipesJSON) : [];
+export const getFromLocalStorage = (key: string): Recipe[] => {
+  const recipesJSON = localStorage.getItem(key);
+  return recipesJSON ? JSON.parse(recipesJSON) : [];
 };

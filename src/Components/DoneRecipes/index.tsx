@@ -12,7 +12,7 @@ function DoneRecipes() {
   // Carrega as receitas da localStorage
   useEffect(() => {
     const loadRecipes = () => {
-      const fetchLoadRecipes = getFromLocalStorage();
+      const fetchLoadRecipes = getFromLocalStorage('doneRecipes');
       // Atualiza o estado das receitas
       setRecipes(fetchLoadRecipes);
     };
@@ -23,11 +23,11 @@ function DoneRecipes() {
     const filterRecipes = () => {
       if (recipeType === 'all') {
         // Se for 'all', carrega todas as receitas da localStorage
-        const fetchAllRecipes = getFromLocalStorage();
+        const fetchAllRecipes = getFromLocalStorage('doneRecipes');
         setRecipes(fetchAllRecipes);
       } else {
         // Caso contrário, filtra as receitas da localStorage com base no tipo (meal ou drink)
-        const fetchUnicRecipes = getFromLocalStorage()
+        const fetchUnicRecipes = getFromLocalStorage('doneRecipes')
           .filter((recipe) => recipe.type === recipeType);
         setRecipes(fetchUnicRecipes);
       }
