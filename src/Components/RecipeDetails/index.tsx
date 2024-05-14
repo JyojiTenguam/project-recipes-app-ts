@@ -4,17 +4,18 @@ import { isRecipeInProgress } from '../../utils/localStorage';
 import shareIcon from '../../images/shareIcon.svg';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
+import { RecipeDetailsType, RecipeType, MealType, DrinkType } from '../../utils/types';
 
 function RecipeDetails() {
-  const [recipe, setRecipe] = useState(null);
+  const [recipe, setRecipe] = useState<RecipeDetailsType>();
   const [copied, setCopied] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const { id } = useParams();
   const location = useLocation();
-  const type = location.pathname.includes('meals') ? 'meals' : 'drinks';
+  const type = location.pathname
+    .includes('meals') ? 'meals' : 'drinks' as keyof RecipeDetailsType;
   const navigate = useNavigate();
   const [recommendations, setRecommendations] = useState([]);
-
   useEffect(() => {
     const fetchRecommendations = async () => {
       let endpoint = '';
@@ -22,8 +23,7 @@ function RecipeDetails() {
         endpoint = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
       } else if (type === 'drinks') {
         endpoint = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
-      }
-      try {
+      } try {
         const response = await fetch(endpoint);
         if (!response.ok) {
           throw new Error('Erro ao carregar os dados');
@@ -36,7 +36,6 @@ function RecipeDetails() {
     };
     fetchRecommendations();
   }, [type]);
-
   useEffect(() => {
     const fetchRecipe = async () => {
       let endpoint = '';
@@ -44,15 +43,14 @@ function RecipeDetails() {
         endpoint = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
       } else if (type === 'drinks') {
         endpoint = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
-      }
-      try {
+      } try {
         const response = await fetch(endpoint);
         if (!response.ok) {
           throw new Error('Erro ao carregar os dados');
         }
         const data = await response.json();
         setRecipe(data);
-        const favoriteRecipes = JSON
+        const favoriteRecipes: RecipeType[] = JSON
           .parse(localStorage.getItem('favoriteRecipes') || '[]');
         const isRecipeFavorite = favoriteRecipes.some((favRecipe) => favRecipe.id === id);
         setIsFavorite(isRecipeFavorite);
@@ -62,7 +60,6 @@ function RecipeDetails() {
     };
     fetchRecipe();
   }, [id, type]);
-
   const copyToClipboard = async () => {
     const link = window.location.href;
     try {
@@ -75,26 +72,40 @@ function RecipeDetails() {
       console.error('Erro ao copiar para a área de transferência:', error);
     }
   };
-
   const toggleFavorite = () => {
-    const favoriteRecipes = JSON.parse(localStorage.getItem('favoriteRecipes') || '[]');
+    const favoriteRecipes: RecipeType[] = JSON
+      .parse(localStorage.getItem('favoriteRecipes') || '[]');
     const index = favoriteRecipes.findIndex((favRecipe) => favRecipe.id === id);
-
     if (index !== -1) {
       favoriteRecipes.splice(index, 1); // Remove a receita do array de favoritos
       localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
       setIsFavorite(false);
     } else {
-      const newRecipe = {
-        id: recipe[type]?.[0].idMeal || recipe[type]?.[0].idDrink,
-        type: recipe[type]?.[0].idMeal ? 'meal' : 'drink',
-        nationality: type === 'meals' ? recipe[type]?.[0].strArea : '',
-        category: recipe[type]?.[0].strCategory,
-        alcoholicOrNot: type === 'drinks' ? recipe[type]?.[0].strAlcoholic : '',
-        name: type === 'meals' ? recipe[type]?.[0].strMeal : recipe[type]?.[0].strDrink,
-        image: type === 'meals' ? recipe[type]?.[0]
-          .strMealThumb : recipe[type]?.[0].strDrinkThumb,
-      };
+      if (!recipe) return;
+      const attRecipe = recipe[type] ? recipe[type]?.[0] : null;
+      if (!attRecipe) return;
+      let newRecipe;
+      if (type === 'meals') {
+        const meal = attRecipe as MealType;
+        newRecipe = {
+          id: meal.idMeal,
+          type: meal.idMeal ? 'meal' : 'drink',
+          nationality: type === 'meals' ? meal.strArea : '',
+          category: meal.strCategory,
+          name: meal.strMeal,
+          image: meal.strMealThumb,
+        };
+      } else {
+        const drink = attRecipe as DrinkType;
+        newRecipe = {
+          id: drink.idDrink,
+          type: drink.idDrink ? 'meal' : 'drink',
+          category: drink.strCategory,
+          alchoholicOrNot: drink.strAlcoholic,
+          name: drink.strDrink,
+          image: drink.strDrinkThumb,
+        };
+      }
       favoriteRecipes.push(newRecipe); // Adiciona a receita ao array de favoritos
       localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
       setIsFavorite(true);
@@ -219,10 +230,10 @@ function RecipeDetails() {
         Compartilhar
       </button>
       <button
-        data-testid="favorite-btn"
         onClick={ toggleFavorite }
       >
         <img
+          data-testid="favorite-btn"
           src={ isFavorite ? blackHeartIcon
             : whiteHeartIcon }
           alt="Favorite"

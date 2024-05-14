@@ -111,3 +111,19 @@ export type DrinkType = {
 export type CategoryType = {
   strCategory: string;
 };
+
+export interface RecipeType {
+  id: string;
+  type: 'meal' | 'drink';
+  nationality: string;
+  category: string;
+  alcoholicOrNot: string;
+  name: string;
+  image: string;
+  doneDate: string;
+  tags: string[];
+}
+
+export type RecipeDetailsType = {
+  meals?: MealType[];
+  drinks?: DrinkType[] };

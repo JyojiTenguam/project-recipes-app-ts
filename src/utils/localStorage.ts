@@ -1,16 +1,6 @@
-export interface Recipe {
-  id: string;
-  type: 'meal' | 'drink';
-  nationality: string;
-  category: string;
-  alcoholicOrNot: string;
-  name: string;
-  image: string;
-  doneDate: string;
-  tags: string[];
-}
+import { RecipeType } from './types';
 
-export const getFromLocalStorage = (): Recipe[] => {
+export const getFromLocalStorage = (): RecipeType[] => {
   const doneRecipesJSON = localStorage.getItem('doneRecipes');
   return doneRecipesJSON ? JSON.parse(doneRecipesJSON) : [];
 };
@@ -24,7 +14,7 @@ export const isRecipeInProgress = (type: string, id: string): boolean => {
     .keys(inProgressRecipes[type]).includes(id) : false;
 };
 
-export const getFavoriteRecipes = (): Recipe[] => {
+export const getFavoriteRecipes = (): RecipeType[] => {
   const favoriteRecipesJSON = localStorage.getItem('favoriteRecipes');
   return favoriteRecipesJSON ? JSON.parse(favoriteRecipesJSON) : [];
 };
