@@ -6,6 +6,7 @@ import favoriteIcon from '../../images/blackHeartIcon.svg';
 
 function FavoriteRecipes() {
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const loadFavoriteRecipes = () => {
@@ -21,6 +22,7 @@ function FavoriteRecipes() {
       ? 'meals' : 'drinks'}/${recipe.id}`;
     navigator.clipboard.writeText(recipeUrl)
       .then(() => {
+        setCopied(true);
       })
       .catch((error) => {
         console.error('Erro ao copiar', error);
@@ -71,6 +73,7 @@ function FavoriteRecipes() {
           <div />
         </div>
       ))}
+      {copied && <p>Link copied!</p>}
     </div>
   );
 }
