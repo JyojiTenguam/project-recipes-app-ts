@@ -1,4 +1,5 @@
 export type MealType = {
+  [key: string]: string | null;
   idMeal: string;
   strMeal: string;
   strDrinkAlternate: string | null;
@@ -55,6 +56,7 @@ export type MealType = {
 };
 
 export type DrinkType = {
+  [key: string]: string | null;
   idDrink: string;
   strDrink: string;
   strDrinkAlternate: string | null;
@@ -112,7 +114,8 @@ export type CategoryType = {
   strCategory: string;
 };
 
-export interface RecipeType {
+export type RecipeType =
+{
   id: string;
   type: 'meal' | 'drink';
   nationality: string;
@@ -120,10 +123,10 @@ export interface RecipeType {
   alcoholicOrNot: string;
   name: string;
   image: string;
-  doneDate: string;
-  tags: string[];
-}
+  // doneDate: string;
+  // tags: string[];
+};
 
 export type RecipeDetailsType = {
-  meals?: MealType[];
-  drinks?: DrinkType[] };
+  meals: MealType[];
+  drinks: DrinkType[] };

@@ -5,6 +5,7 @@ import shareIcon from '../../images/shareIcon.svg';
 import whiteHeartIcon from '../../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../../images/blackHeartIcon.svg';
 import { RecipeDetailsType, RecipeType, MealType, DrinkType } from '../../utils/types';
+import './style.css';
 
 function RecipeDetails() {
   const [recipe, setRecipe] = useState<RecipeDetailsType>();
@@ -15,7 +16,7 @@ function RecipeDetails() {
   const type = location.pathname
     .includes('meals') ? 'meals' : 'drinks' as keyof RecipeDetailsType;
   const navigate = useNavigate();
-  const [recommendations, setRecommendations] = useState([]);
+  const [recommendations, setRecommendations] = useState<(MealType | DrinkType)[]>([]);
   useEffect(() => {
     const fetchRecommendations = async () => {
       let endpoint = '';
@@ -33,8 +34,7 @@ function RecipeDetails() {
       } catch (error) {
         console.error('Erro:', error);
       }
-    };
-    fetchRecommendations();
+    }; fetchRecommendations();
   }, [type]);
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -57,8 +57,7 @@ function RecipeDetails() {
       } catch (error) {
         console.error('Erro:', error);
       }
-    };
-    fetchRecipe();
+    }; fetchRecipe();
   }, [id, type]);
   const copyToClipboard = async () => {
     const link = window.location.href;
@@ -89,35 +88,32 @@ function RecipeDetails() {
         const meal = attRecipe as MealType;
         newRecipe = {
           id: meal.idMeal,
-          type: meal.idMeal ? 'meal' : 'drink',
-          nationality: type === 'meals' ? meal.strArea : '',
+          type: 'meal',
+          nationality: meal.strArea,
           category: meal.strCategory,
+          alcoholicOrNot: '',
           name: meal.strMeal,
           image: meal.strMealThumb,
-        };
+        } as unknown as RecipeType;
       } else {
         const drink = attRecipe as DrinkType;
         newRecipe = {
           id: drink.idDrink,
-          type: drink.idDrink ? 'meal' : 'drink',
+          type: 'drink',
+          nationality: '',
           category: drink.strCategory,
-          alchoholicOrNot: drink.strAlcoholic,
+          alcoholicOrNot: drink.strAlcoholic,
           name: drink.strDrink,
           image: drink.strDrinkThumb,
-        };
+        } as unknown as RecipeType;
       }
       favoriteRecipes.push(newRecipe); // Adiciona a receita ao array de favoritos
       localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
       setIsFavorite(true);
     }
-
-    console.log('Favorite Recipes:', favoriteRecipes);
-  };
-
-  if (!recipe || recommendations.length === 0) {
+  }; if (!recipe || recommendations.length === 0) {
     return <div>Carregando...</div>;
   }
-
   const renderIngredients = () => {
     const ingredients = [];
     for (let index = 0; index <= 20; index++) {
@@ -130,8 +126,7 @@ function RecipeDetails() {
           </li>,
         );
       }
-    }
-    return ingredients;
+    } return ingredients;
   };
   return (
     <div>
@@ -218,7 +213,7 @@ function RecipeDetails() {
         onClick={ () => navigate(`/${type.endsWith('s')
           ? type : `${type}s`}/${id}/in-progress`) }
       >
-        {isRecipeInProgress(type, id) ? 'Continue Recipe' : 'Start Recipe'}
+        {isRecipeInProgress(type, id!.toString()) ? 'Continue Recipe' : 'Start Recipe'}
       </button>
       <button
         data-testid="share-btn"
@@ -226,7 +221,6 @@ function RecipeDetails() {
         onClick={ copyToClipboard }
       >
         <img src={ shareIcon } alt="Share" style={ { width: '20px' } } />
-        {' '}
         Compartilhar
       </button>
       <button
@@ -234,27 +228,15 @@ function RecipeDetails() {
       >
         <img
           data-testid="favorite-btn"
-          src={ isFavorite ? blackHeartIcon
-            : whiteHeartIcon }
+          src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
           alt="Favorite"
           style={ { width: '20px' } }
         />
       </button>
       {copied && (
-        <p
-          style={ {
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            backgroundColor: 'rgba(0, 255, 0, 0.5)',
-            padding: '10px',
-            borderRadius: '5px',
-          } }
-        >
+        <p>
           Link copied!
-        </p>
-      )}
+        </p>)}
     </div>
   );
 }
