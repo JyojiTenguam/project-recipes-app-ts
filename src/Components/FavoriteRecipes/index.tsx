@@ -53,7 +53,7 @@ function FavoriteRecipes() {
           </Link>
           <p data-testid={ `${index}-horizontal-top-text` }>
             {recipe.type === 'meal'
-              ? `${recipe.nationality} - ${recipe.category}` : ''}
+              ? `${recipe.nationality} - ${recipe.category}` : 'Alcoholic'}
           </p>
           <input
             type="image"
