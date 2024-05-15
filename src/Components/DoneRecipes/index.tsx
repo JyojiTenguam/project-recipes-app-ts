@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { getFromLocalStorage, Recipe } from '../../utils/localStorage';
+import { getLocalStorage, Recipe } from '../../utils/localStorage';
 import shareIcon from '../../images/shareIcon.svg';
 
 function DoneRecipes() {
@@ -13,7 +12,7 @@ function DoneRecipes() {
   // Carrega as receitas da localStorage
   useEffect(() => {
     const loadRecipes = () => {
-      const fetchLoadRecipes = getFromLocalStorage('doneRecipes');
+      const fetchLoadRecipes = getLocalStorage('doneRecipes');
       // Atualiza o estado das receitas
       setRecipes(fetchLoadRecipes);
     };
@@ -24,11 +23,11 @@ function DoneRecipes() {
     const filterRecipes = () => {
       if (recipeType === 'all') {
         // Se for 'all', carrega todas as receitas da localStorage
-        const fetchAllRecipes = getFromLocalStorage('doneRecipes');
+        const fetchAllRecipes = getLocalStorage('doneRecipes');
         setRecipes(fetchAllRecipes);
       } else {
         // Caso contrário, filtra as receitas da localStorage com base no tipo (meal ou drink)
-        const fetchUnicRecipes = getFromLocalStorage('doneRecipes')
+        const fetchUnicRecipes = getLocalStorage('doneRecipes')
           .filter((recipe) => recipe.type === recipeType);
         setRecipes(fetchUnicRecipes);
       }
@@ -73,25 +72,19 @@ function DoneRecipes() {
       {/* Renderização do card da receita */}
       {recipes.map((recipe, index) => (
         <div key={ recipe.id }>
-          <Link
-            to={ `/${recipe.type === 'meal'
-              ? 'meals' : 'drinks'}/${recipe.id}` }
-          >
-            <img
-              src={ recipe.image }
-              alt={ recipe.name }
-              data-testid={ `${index}-horizontal-image` }
-              width={ 250 } // cy.click precisa pegar o centro da imagem.
-            />
-            <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
-          </Link>
+          <img
+            src={ recipe.image }
+            alt={ recipe.name }
+            data-testid={ `${index}-horizontal-image` }
+            width={ 100 }
+          />
           <p data-testid={ `${index}-horizontal-top-text` }>
             {recipe.type === 'meal'
               ? `${recipe.nationality} - ${recipe.category}` : 'Alcoholic'}
           </p>
+          <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
           <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
-          {/* Quando o input é utilizado com src se torna um botão,
-          nesse caso para compartilhamento para cada receita */}
+          {/* Botão de compartilhamento para cada receita */}
           <input
             type="image"
             src={ shareIcon }
