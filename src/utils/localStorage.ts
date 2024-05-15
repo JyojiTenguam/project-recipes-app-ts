@@ -8,10 +8,14 @@ export interface Recipe {
   image: string;
   doneDate: string;
   tags: string[];
+  favorite: boolean;
 }
 
-// Obtem os dados das receitas e armazena no local storage
 export const getFromLocalStorage = (key: string): Recipe[] => {
   const recipesJSON = localStorage.getItem(key);
   return recipesJSON ? JSON.parse(recipesJSON) : [];
+};
+
+export const setToLocalStorage = (key: string, data: Recipe[]): void => {
+  localStorage.setItem(key, JSON.stringify(data));
 };

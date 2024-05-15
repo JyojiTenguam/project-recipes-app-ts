@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Recipe, getFromLocalStorage } from '../../utils/localStorage';
 import shareIcon from '../../images/shareIcon.svg';
@@ -6,6 +6,7 @@ import favoriteIcon from '../../images/blackHeartIcon.svg';
 
 function FavoriteRecipes() {
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const loadFavoriteRecipes = () => {
@@ -21,6 +22,7 @@ function FavoriteRecipes() {
       ? 'meals' : 'drinks'}/${recipe.id}`;
     navigator.clipboard.writeText(recipeUrl)
       .then(() => {
+        setCopied(true);
       })
       .catch((error) => {
         console.error('Erro ao copiar', error);
@@ -53,7 +55,7 @@ function FavoriteRecipes() {
           </Link>
           <p data-testid={ `${index}-horizontal-top-text` }>
             {recipe.type === 'meal'
-              ? `${recipe.nationality}` : ''}
+              ? `${recipe.nationality} - ${recipe.category}` : 'Alcoholic'}
           </p>
           <input
             type="image"
@@ -71,6 +73,7 @@ function FavoriteRecipes() {
           <div />
         </div>
       ))}
+      {copied && <p>Link copied!</p>}
     </div>
   );
 }

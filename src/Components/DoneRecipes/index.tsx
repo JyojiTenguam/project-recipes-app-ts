@@ -14,7 +14,6 @@ function DoneRecipes() {
   useEffect(() => {
     const loadRecipes = () => {
       const fetchLoadRecipes = getFromLocalStorage('doneRecipes');
-      console.log(fetchLoadRecipes);
       // Atualiza o estado das receitas
       setRecipes(fetchLoadRecipes);
     };
@@ -115,5 +114,4 @@ function DoneRecipes() {
     </div>
   );
 }
-
 export default DoneRecipes;
