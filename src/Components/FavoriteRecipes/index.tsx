@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Recipe, getFromLocalStorage } from '../../utils/localStorage';
+import { Recipe, getLocalStorage } from '../../utils/localStorage';
 import shareIcon from '../../images/shareIcon.svg';
 import favoriteIcon from '../../images/blackHeartIcon.svg';
 
@@ -10,7 +10,7 @@ function FavoriteRecipes() {
 
   useEffect(() => {
     const loadFavoriteRecipes = () => {
-      const fetchedFavoriteRecipes = getFromLocalStorage('favoriteRecipes');
+      const fetchedFavoriteRecipes = getLocalStorage('favoriteRecipes');
       setFavoriteRecipes(fetchedFavoriteRecipes);
     };
 
