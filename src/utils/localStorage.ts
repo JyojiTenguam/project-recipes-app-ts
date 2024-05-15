@@ -1,3 +1,5 @@
+import { RecipeType } from './types';
+
 export interface Recipe {
   id: string;
   type: 'meal' | 'drink';
@@ -11,11 +13,27 @@ export interface Recipe {
   favorite: boolean;
 }
 
-export const getFromLocalStorage = (key: string): Recipe[] => {
-  const recipesJSON = localStorage.getItem(key);
-  return recipesJSON ? JSON.parse(recipesJSON) : [];
+export const getFromLocalStorage = (): RecipeType[] => {
+  const doneRecipesJSON = localStorage.getItem('doneRecipes');
+  return doneRecipesJSON ? JSON.parse(doneRecipesJSON) : [];
 };
 
 export const setToLocalStorage = (key: string, data: Recipe[]): void => {
   localStorage.setItem(key, JSON.stringify(data));
+};
+
+export const getInProgressRecipes = (): Record<string, string[]> => {
+  const inProgressRecipesJSON = localStorage.getItem('inProgressRecipes');
+  return inProgressRecipesJSON ? JSON.parse(inProgressRecipesJSON) : {};
+};
+
+export const isRecipeInProgress = (type: string, id: string): boolean => {
+  const inProgressRecipes = getInProgressRecipes();
+  return inProgressRecipes[type] ? Object
+    .keys(inProgressRecipes[type]).includes(id) : false;
+};
+
+export const getFavoriteRecipes = (): RecipeType[] => {
+  const favoriteRecipesJSON = localStorage.getItem('favoriteRecipes');
+  return favoriteRecipesJSON ? JSON.parse(favoriteRecipesJSON) : [];
 };

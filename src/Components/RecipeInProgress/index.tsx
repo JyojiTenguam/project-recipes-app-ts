@@ -188,7 +188,6 @@ function RecipeInProgress() {
       <br />
       <br />
     </div>
-
   );
 }
 
