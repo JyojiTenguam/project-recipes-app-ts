@@ -7,6 +7,7 @@ import favoriteIcon from '../../images/blackHeartIcon.svg';
 function FavoriteRecipes() {
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
   const [copied, setCopied] = useState(false);
+  const [filterType, setFilterType] = useState<'all' | 'meal' | 'drink'>('all');
 
   useEffect(() => {
     const loadFavoriteRecipes = () => {
@@ -35,20 +36,37 @@ function FavoriteRecipes() {
       });
   };
 
+  const handleFilterByType = (type: 'all' | 'meal' | 'drink') => {
+    setFilterType(type);
+  };
+  const filteredRecipes = filterType === 'all'
+    ? favoriteRecipes
+    : favoriteRecipes.filter((recipe) => (filterType === 'meal' && recipe.type === 'meal')
+    || (filterType === 'drink' && recipe.type === 'drink'));
+
   return (
     <div>
       <div>
-        <button data-testid="filter-by-all-btn">
+        <button
+          data-testid="filter-by-all-btn"
+          onClick={ () => handleFilterByType('all') }
+        >
           All
         </button>
-        <button data-testid="filter-by-meal-btn">
+        <button
+          data-testid="filter-by-meal-btn"
+          onClick={ () => handleFilterByType('meal') }
+        >
           Meals
         </button>
-        <button data-testid="filter-by-drink-btn">
+        <button
+          data-testid="filter-by-drink-btn"
+          onClick={ () => handleFilterByType('drink') }
+        >
           Drinks
         </button>
       </div>
-      {favoriteRecipes.map((recipe, index) => (
+      {filteredRecipes.map((recipe, index) => (
         <div key={ recipe.id }>
           <Link to={ `/${recipe.type === 'meal' ? 'meals' : 'drinks'}/${recipe.id}` }>
             <img
