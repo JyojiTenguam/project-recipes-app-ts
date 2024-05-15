@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Recipe, getLocalStorage } from '../../utils/localStorage';
+import { Recipe, getLocalStorage, setToLocalStorage } from '../../utils/localStorage';
 import shareIcon from '../../images/shareIcon.svg';
 import favoriteIcon from '../../images/blackHeartIcon.svg';
 
@@ -16,6 +16,12 @@ function FavoriteRecipes() {
 
     loadFavoriteRecipes();
   }, []);
+
+  const handleRemoveFavorite = (recipeId: string) => {
+    const upFavorites = favoriteRecipes.filter((recipe) => recipe.id !== recipeId);
+    setFavoriteRecipes(upFavorites);
+    setToLocalStorage('favoriteRecipes', upFavorites);
+  };
 
   const handleShareClick = (recipe: Recipe) => {
     const recipeUrl = `${window.location.origin}/${recipe.type === 'meal'
@@ -49,7 +55,7 @@ function FavoriteRecipes() {
               src={ recipe.image }
               alt={ recipe.name }
               data-testid={ `${index}-horizontal-image` }
-              width={ 250 }
+              width={ 100 }
             />
             <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
           </Link>
@@ -67,7 +73,8 @@ function FavoriteRecipes() {
           <input
             type="image"
             src={ favoriteIcon }
-            alt="Favoritar"
+            alt="Desfavoritar"
+            onClick={ () => handleRemoveFavorite(recipe.id) }
             data-testid={ `${index}-horizontal-favorite-btn` }
           />
           <div />
