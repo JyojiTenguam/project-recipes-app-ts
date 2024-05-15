@@ -18,8 +18,8 @@ export const getFromLocalStorage = (): RecipeType[] => {
   return doneRecipesJSON ? JSON.parse(doneRecipesJSON) : [];
 };
 
-/*Qual a função dessa getFromLocalStorage*/
-/* export const getFromLocalStorage = (key: string): Recipe[] => {
+/*Qual a função dessa getFromLocalStorage
+ export const getFromLocalStorage = (key: string): Recipe[] => {
   const recipesJSON = localStorage.getItem(key);
   return recipesJSON ? JSON.parse(recipesJSON) : [];
 }; */
