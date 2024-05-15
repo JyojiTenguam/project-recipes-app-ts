@@ -18,6 +18,11 @@ export const getFromLocalStorage = (): RecipeType[] => {
   return doneRecipesJSON ? JSON.parse(doneRecipesJSON) : [];
 };
 
+export const getLocalStorage = (key: string): Recipe[] => {
+  const recipesJSON = localStorage.getItem(key);
+  return recipesJSON ? JSON.parse(recipesJSON) : [];
+};
+
 export const setToLocalStorage = (key: string, data: Recipe[]): void => {
   localStorage.setItem(key, JSON.stringify(data));
 };
