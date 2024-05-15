@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getFromLocalStorage, Recipe } from '../../utils/localStorage';
 import shareIcon from '../../images/shareIcon.svg';
 
@@ -72,18 +73,25 @@ function DoneRecipes() {
       {/* Renderização do card da receita */}
       {recipes.map((recipe, index) => (
         <div key={ recipe.id }>
-          <img
-            src={ recipe.image }
-            alt={ recipe.name }
-            data-testid={ `${index}-horizontal-image` }
-          />
+          <Link
+            to={ `/${recipe.type === 'meal'
+              ? 'meals' : 'drinks'}/${recipe.id}` }
+          >
+            <img
+              src={ recipe.image }
+              alt={ recipe.name }
+              data-testid={ `${index}-horizontal-image` }
+              width={ 250 } // cy.click precisa pegar o centro da imagem.
+            />
+            <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
+          </Link>
           <p data-testid={ `${index}-horizontal-top-text` }>
             {recipe.type === 'meal'
               ? `${recipe.nationality} - ${recipe.category}` : 'Alcoholic'}
           </p>
-          <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
           <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
-          {/* Botão de compartilhamento para cada receita */}
+          {/* Quando o input é utilizado com src se torna um botão,
+          nesse caso para compartilhamento para cada receita */}
           <input
             type="image"
             src={ shareIcon }
