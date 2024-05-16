@@ -20,7 +20,13 @@ function Profile() {
       >
         Favorite Recipes
       </button>
-      <button data-testid="profile-logout-btn">
+      <button
+        data-testid="profile-logout-btn"
+        onClick={ () => {
+          localStorage.clear();
+          navigate('/');
+        } }
+      >
         Logout
       </button>
     </div>
