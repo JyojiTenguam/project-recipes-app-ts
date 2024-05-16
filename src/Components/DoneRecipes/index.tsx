@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getLocalStorage, Recipe } from '../../utils/localStorage';
 import shareIcon from '../../images/shareIcon.svg';
 
 function DoneRecipes() {
-  // Armazena as receitas
+// Armazena as receitas
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   // Controla o tipo de receita a ser exibida
   const [recipeType, setRecipeType] = useState<'meal' | 'drink' | 'all'>('all');
@@ -47,9 +48,7 @@ function DoneRecipes() {
     navigator.clipboard.writeText(recipeUrl)
       .then(() => {
         setCopied(true);
-        setTimeout(() => {
-          setCopied(false);
-        }, 2000);
+        setTimeout(() => setCopied(false), 2000);
       })
       .catch((error) => {
         console.error('Erro ao copiar', error);
@@ -72,17 +71,19 @@ function DoneRecipes() {
       {/* Renderização do card da receita */}
       {recipes.map((recipe, index) => (
         <div key={ recipe.id }>
-          <img
-            src={ recipe.image }
-            alt={ recipe.name }
-            data-testid={ `${index}-horizontal-image` }
-            width={ 100 }
-          />
+          <Link to={ `/${recipe.type === 'meal' ? 'meals' : 'drinks'}/${recipe.id}` }>
+            <img
+              src={ recipe.image }
+              alt={ recipe.name }
+              data-testid={ `${index}-horizontal-image` }
+              width={ 100 }
+            />
+            <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
+          </Link>
           <p data-testid={ `${index}-horizontal-top-text` }>
             {recipe.type === 'meal'
               ? `${recipe.nationality} - ${recipe.category}` : 'Alcoholic'}
           </p>
-          <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
           <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
           {/* Botão de compartilhamento para cada receita */}
           <input
