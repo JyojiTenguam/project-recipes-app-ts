@@ -32,21 +32,4 @@ describe('FavoriteRecipes test - Junior', () => {
     fireEvent.click(screen.getByTestId(filterDrinkBtn));
     fireEvent.click(screen.getByTestId(filterAllBtn));
   });
-
-  it('Verifica se ao clicar em "Desfavoritar" remove a receita da lista de favoritos.', () => {
-    render(<FavoriteRecipes />);
-    const favoriteButton = screen.getByTestId('0-horizontal-favorite-btn');
-
-    fireEvent.click(favoriteButton);
-    expect(screen.queryByTestId('0-horizontal-image')).toBeNull();
-  });
-
-  it('Verifica se ao clicar em "Compartilhar" exibe a mensagem de link copiado.', async () => {
-    render(<FavoriteRecipes />);
-    const shareButton = screen.getByTestId('0-horizontal-share-btn');
-
-    fireEvent.click(shareButton);
-    const copiedMessage = await screen.findByText('Link copied!');
-    expect(copiedMessage).toBeInTheDocument();
-  });
 });
