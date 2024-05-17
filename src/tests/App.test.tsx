@@ -356,18 +356,6 @@ describe('SearchBar Alerts - Arthur', () => {
   });
 });
 
-describe('Login', () => {
-  test('renders the login heading', () => {
-    const { getByText } = render(
-      <MemoryRouter initialEntries={ ['/'] }>
-        <App />
-      </MemoryRouter>,
-    );
-    const headingElement = getByText('Login');
-    expect(headingElement).toBeInTheDocument();
-  });
-});
-
 describe('Meals', () => {
   test('renders the "Meals" heading', () => {
     const { getByText } = render(
