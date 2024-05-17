@@ -1,5 +1,5 @@
-import { render, fireEvent, waitFor } from '@testing-library/react';
-import { MemoryRouter, BrowserRouter } from 'react-router-dom';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { MemoryRouter, BrowserRouter, Route, Routes } from 'react-router-dom';
 import { vi } from 'vitest';
 import Header from '../Components/Header/index';
 import Footer from '../Components/Footer';
@@ -15,6 +15,7 @@ import App from '../App';
 import renderWithRouter from './RenderWithRouter';
 import SearchBar from '../Components/SearchBar';
 import mockDrinkCategories from './mocks/mockDrinkCategories';
+import Profile from '../Components/Profile/index';
 
 const SEARCH_TOP_BTN = 'search-top-btn';
 const SEARCH_INPUT = 'search-input';
@@ -528,5 +529,45 @@ describe('Recipes', () => {
     await expect(drinkCategories2).toHaveLength(6);
     await user.click(drinkCategories[5]);
     await user.click(drinkCategories[5]);
+  });
+});
+
+describe('Profile Component Tests', () => {
+  const setup = (initialPath = '/profile') => {
+    window.localStorage.setItem('user', JSON.stringify({ email: 'user@test.com' }));
+    return render(
+      <MemoryRouter initialEntries={ [initialPath] }>
+        <Routes>
+          <Route path="/profile" element={ <Profile /> } />
+          <Route path="/" element={ <h1>Login Page</h1> } />
+          <Route path="/done-recipes" element={ <h1>Done Recipes</h1> } />
+          <Route path="/favorite-recipes" element={ <h1>Favorite Recipes</h1> } />
+        </Routes>
+      </MemoryRouter>,
+    );
+  };
+
+  test('should display the user email from localStorage', () => {
+    setup();
+    expect(screen.getByTestId('profile-email')).toHaveTextContent('user@test.com');
+  });
+
+  test('should navigate to Done Recipes page when button clicked', () => {
+    setup();
+    fireEvent.click(screen.getByTestId('profile-done-btn'));
+    expect(screen.getByText('Done Recipes')).toBeInTheDocument();
+  });
+
+  test('should navigate to Favorite Recipes page when button clicked', () => {
+    setup();
+    fireEvent.click(screen.getByTestId('profile-favorite-btn'));
+    expect(screen.getByText('Favorite Recipes')).toBeInTheDocument();
+  });
+
+  test('should clear localStorage and navigate to login on logout', () => {
+    setup();
+    fireEvent.click(screen.getByTestId('profile-logout-btn'));
+    expect(window.localStorage.getItem('user')).toBeNull();
+    expect(screen.getByText('Login Page')).toBeInTheDocument();
   });
 });
