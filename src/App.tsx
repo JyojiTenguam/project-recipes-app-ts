@@ -12,7 +12,7 @@ import RecipeDetails from './Components/RecipeDetails';
 function App() {
   return (
     <Routes>
-      <Route path="/" element={ <Login /> } />
+      <Route index element={ <Login /> } />
       <Route path="/" element={ <Layout /> }>
         <Route path="/meals" element={ <Meals /> } />
         <Route path="/drinks" element={ <Drinks /> } />
