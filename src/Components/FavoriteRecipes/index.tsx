@@ -42,7 +42,7 @@ function FavoriteRecipes() {
   const filteredRecipes = filterType === 'all'
     ? favoriteRecipes
     : favoriteRecipes.filter((recipe) => (filterType === 'meal' && recipe.type === 'meal')
-    || (filterType === 'drink' && recipe.type === 'drink'));
+|| (filterType === 'drink' && recipe.type === 'drink'));
 
   return (
     <div>
