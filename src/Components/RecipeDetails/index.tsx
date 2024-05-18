@@ -213,7 +213,7 @@ function RecipeDetails() {
         onClick={ () => navigate(`/${type.endsWith('s')
           ? type : `${type}s`}/${id}/in-progress`) }
       >
-        {isRecipeInProgress(type, id!.toString()) ? 'Continue Recipe' : 'Start Recipe'}
+        {isRecipeInProgress(type, id!) ? 'Continue Recipe' : 'Start Recipe'}
       </button>
       <button
         data-testid="share-btn"
