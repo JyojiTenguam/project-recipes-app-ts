@@ -1,8 +1,6 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import DoneRecipes from '../Components/DoneRecipes';
 import renderWithRouter from './RenderWithRouter';
-import oneResultDrink from './mocks/oneResultDrink';
 
 const doneRecipes = [
   {
