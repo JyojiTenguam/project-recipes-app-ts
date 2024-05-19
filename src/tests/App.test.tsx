@@ -469,7 +469,7 @@ describe('Recipes', () => {
       json: async () => MockDrinks,
     } as Response;
 
-    const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue(MockDrink);
+    vi.spyOn(global, 'fetch').mockResolvedValue(MockDrink);
     const { user, getByText, findAllByTestId } = renderWithRouter(<App />, { route: '/drinks' });
 
     await expect(getByText('All')).toBeInTheDocument();
