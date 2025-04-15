@@ -57,13 +57,13 @@ Este projeto foi desenvolvido **em grupo** como parte do cronograma da Trybe e u
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/tryber/sd-039-project-recipes-app-ts.git
+git clone https://github.com/tryber/project-recipes-app-ts.git
 ```
 
 2. Acesse a pasta do projeto
 
 ```bash
-cd exercise-solar-system
+cd project-recipes-app-ts
 ```
 
 3. Instale as dependências
