@@ -15,7 +15,7 @@ Este projeto é um aplicativo de receitas desenvolvido em React com TypeScript. 
 - [Como Rodar o Projeto](#-como-rodar-o-projeto)
 - [Estrutura de Pastas](#-estrutura-de-pastas)
 - [Autores](#-autores)
-
+- [Em Desenvolvimento Contínuo](#-em-desenvolvimento-continuo)
 ## 💡 Sobre
 
 O aplicativo utiliza dados das APIs [TheMealDB](https://www.themealdb.com/api.php) e [TheCocktailDB](https://www.thecocktaildb.com/api.php) para exibir receitas e bebidas. O foco é a experiência do usuário em encontrar, explorar e preparar receitas com facilidade.
