@@ -98,7 +98,7 @@ npm start
 
 Este projeto foi desenvolvido em grupo pelos estudantes da **Turma 39** da **Trybe**, utilizando práticas de colaboração e desenvolvimento ágil.
 
-- [Jonathan Jyoji Tenguam](https://github.com/JyojiTengu)
+- [Jonathan Jyoji Tenguam](https://github.com/JyojiTenguam)
 - [Arthur Oliveira](https://github.com/ArthurOliveiraSPM)
 - [Daniel Frade](https://github.com/daniel-frade)
 - [JuniorWSP](https://github.com/JuniorWSP)
